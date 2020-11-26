@@ -90,22 +90,31 @@ class Login extends StatelessWidget {
                   SizedBox(height: 30,),
                   Container(
                     height: 50,
-                    decoration: BoxDecoration(
+                    /*decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
                         colors:[
                           Color.fromRGBO(255, 114, 21, 1),
-                          Color.fromRGBO(218, 122, 59, 1)
+                          Color.fromRGBO(255, 114, 21, 1)
                         ]
                       )
-                    ),
+                    ),*/
                     child: Center(
+                      
                       child: RaisedButton(
                         child:Text("Login",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)) ,
                         onPressed: (){
                           Navigator.pushNamed(context, '/home');
-                        }
+                        },
+                         shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Color.fromRGBO(255, 114, 21, 1))
+                        ),
+                        padding: EdgeInsets.all(10.0),
+                        
+                        color: Color.fromRGBO(255, 114, 21, 1),
                       ),
+                      
                     )
                   ),
                   SizedBox(height: 50,),
