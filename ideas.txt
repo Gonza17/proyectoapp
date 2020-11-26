@@ -1,0 +1,9 @@
+Aquí dejaremos ideas para la pagina 
+Home: 
+-tendra una barra con el titulo de la aplicacion 
+-abajo 5 opciones: 
+1. La pagina principal donde saldran las ultimas recetas subidas por las personas que sigues.
+2. La opcion de la lupa para buscar recetas.
+3. La opcion para poder ingresar una receta, poder subir foto de esta y dar descripcion y pasos para poder preparar la receta.
+4. La opcion de poder mandar mensajes a las personas que sigues.
+5. La opcion de poder ver tu perfil, ademas de poder actualizar los datos.
