@@ -13,26 +13,26 @@ class _HomeState extends State<Home> {
         title: Text('King´s Food'),
       ),
       body: Container(),
-      bottomNavigationBar: BottomNavigationBar(items: [
+      bottomNavigationBar: BottomNavigationBar(currentIndex: 0, items: [
         BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text(''),
+            label: Text(''),
             backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            title: Text('buscar'),
+            label: Text('buscar'),
             backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.camera),
-            title: Text('nuevo post'),
+            label: Text('nuevo post'),
             backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.message),
-            title: Text('Mensajes'),
+            label: Text('Mensajes'),
             backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('perfil'),
+            label: Text('perfil'),
             backgroundColor: Colors.red),
       ]),
     );
