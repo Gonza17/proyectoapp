@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:proyectoapp/home.dart';
 
 void main() => runApp(
   MaterialApp(
-    home: HomePage(),
+    home: Login(),
+    initialRoute: '/',
+    routes:{
+      //'/': (context) => Login(),
+      '/home': (context) => Home(),
+    }
   )
 );
-class HomePage extends StatelessWidget {
+
+
+class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +100,12 @@ class HomePage extends StatelessWidget {
                       )
                     ),
                     child: Center(
-                      child:Text("Login",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)) ,
+                      child: RaisedButton(
+                        child:Text("Login",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)) ,
+                        onPressed: (){
+                          Navigator.pushNamed(context, '/home');
+                        }
+                      ),
                     )
                   ),
                   SizedBox(height: 50,),
