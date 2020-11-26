@@ -83,14 +83,20 @@ class HomePage extends StatelessWidget {
                   Container(
                     height: 50,
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
                         colors:[
-                          Color.fromRGBO(218, 122, 59, .1),
-                          Color.fromRGBO(218, 122, 59, .6)
+                          Color.fromRGBO(255, 114, 21, 1),
+                          Color.fromRGBO(218, 122, 59, 1)
                         ]
                       )
                     ),
-                  )
+                    child: Center(
+                      child:Text("Login",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)) ,
+                    )
+                  ),
+                  SizedBox(height: 50,),
+                  Text("Registrarse", style: TextStyle(color: Color.fromRGBO(218, 122, 59, 1), fontWeight: FontWeight.bold)) 
                 ],
               )
             )
