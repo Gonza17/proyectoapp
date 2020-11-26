@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget{
-
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text('Nombre'),
       ),
-    )
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              title: Text('Opciones'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text('guardado'),
+              onTap: () {},
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
