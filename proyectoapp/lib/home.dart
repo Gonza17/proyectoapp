@@ -16,24 +16,24 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(items: [
         BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('inicio'),
-            backgroundColor: Colors.orange[300]),
+            title: Text(''),
+            backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            title: Text('Buscar'),
-            backgroundColor: Colors.orange[300]),
+            title: Text('buscar'),
+            backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.camera),
             title: Text('nuevo post'),
-            backgroundColor: Colors.orange[300]),
+            backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.message),
             title: Text('Mensajes'),
-            backgroundColor: Colors.orange[300]),
+            backgroundColor: Colors.red),
         BottomNavigationBarItem(
             icon: Icon(Icons.person),
             title: Text('perfil'),
-            backgroundColor: Colors.orange[300]),
+            backgroundColor: Colors.red),
       ]),
     );
   }
