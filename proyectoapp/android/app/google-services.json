@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "108729003643",
+    "firebase_url": "https://app-movil-comida.firebaseio.com",
+    "project_id": "app-movil-comida",
+    "storage_bucket": "app-movil-comida.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108729003643:android:61290dc1b77aa24c42bcde",
+        "android_client_info": {
+          "package_name": "com.example.proyectoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108729003643-lqd2rbapevb7s9eo11smduveq4spoojj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3lSSI-j6l7h7FfgByFtS2Oy7_IJMyKkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108729003643-lqd2rbapevb7s9eo11smduveq4spoojj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
