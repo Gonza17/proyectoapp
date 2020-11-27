@@ -13,7 +13,7 @@ class MiApp extends StatelessWidget{
     routes:{
       //'/': (context) => Login(),
       '/home': (context) => Home(),
-      '/registro': (context) => Registro(),
+      '/registro': (context) => RegistrationScreen(),
     }
   );
   }
