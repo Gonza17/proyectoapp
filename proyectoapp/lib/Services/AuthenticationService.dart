@@ -12,11 +12,8 @@ Future createNewUser(String email, String password) async {
           email: email.trim(), password: password);
     User user = result.user;
     return user;
-  } on Exception catch(e){
+  }catch(e){
     print(e.toString());
-  }
-    catch(err){
-    print(err.toString());
   }
 }
 

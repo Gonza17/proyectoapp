@@ -156,7 +156,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
   void registrar() async{
     dynamic result = await _auth.createNewUser(_emailContoller.text,_passwordController.text);
-    if(!result){
+    if(result==null){
       print('email no es valido');
     }else{
       print(result.toString());
