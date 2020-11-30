@@ -20,12 +20,19 @@ class MiApp extends StatelessWidget{
 }
 
 class Login extends StatelessWidget {
+    final _key = GlobalKey<FormState>();
+    TextEditingController _correoController = TextEditingController();
+    TextEditingController _passwordController = TextEditingController();
+     
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: Form(
+        key: _key,
         child: Column(
+          
           children: <Widget>[
             Container(
               height: 400,
@@ -72,7 +79,14 @@ class Login extends StatelessWidget {
                           decoration: BoxDecoration(
                             border: Border(bottom: BorderSide(color: Colors.grey[100]))
                           ),
-                          child: new TextField(
+                          child: new TextFormField(
+                            controller: _correoController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Correo necesario';
+                              } else
+                                  return null;
+                            },
                             decoration: new InputDecoration(
                               border: InputBorder.none,
                               hintText: "Correo",
@@ -89,7 +103,14 @@ class Login extends StatelessWidget {
                         ),*/
                         Container(
                           padding: EdgeInsets.all(8.0),
-                          child: TextField(
+                          child: TextFormField(
+                            controller: _passwordController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Correo necesario';
+                              } else
+                                  return null;
+                            },
                             obscureText: true,
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -117,8 +138,10 @@ class Login extends StatelessWidget {
                       
                       child: RaisedButton(
                         child:Text("Ingresar",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)) ,
-                        onPressed: (){
-                          Navigator.pushNamed(context, '/home');
+                        onPressed: () {
+                              if (_key.currentState.validate()) {
+                                Navigator.pushNamed(context, '/home');;
+                              }
                         },
                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),

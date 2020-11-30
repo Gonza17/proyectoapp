@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:proyectoapp/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,7 +13,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _key = GlobalKey<FormState>();
-
+  final AuthenticationService _auth = AuthenticationService();
 
 
   TextEditingController _nombreController = TextEditingController();
@@ -23,9 +24,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     Query query = FirebaseFirestore.instance.collection("Usuarios");
-    void registrar() async {
-      await FirebaseFirestore.instance.collection("Usuarios").add({"nombre":_nombreController.text, "correo":_emailContoller.text,"contraseña":_passwordController.text,"edad":_edadController.text}).then((value) => print(value.id));
-    }
     return Scaffold(
       backgroundColor: Colors.white,
       
@@ -155,5 +153,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
+  }
+  void registrar() async{
+    dynamic result = await _auth.createNewUser(_emailContoller.text,_passwordController.text);
+    if(!result){
+      print('email no es valido');
+    }else{
+      print(result.toString());
+      _nombreController.clear();
+      _emailContoller.clear();
+      _passwordController.clear();
+      _edadController.clear();
+      Navigator.pop(context);
+    }
   }
 }
