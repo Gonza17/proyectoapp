@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proyectoapp/Services/AuthenticationService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,12 +17,27 @@ class _HomeState extends State<Home> {
     Center(child: Text('mensajes')),
     Center(child: Text('perfil')),
   ];
+  final AuthenticationService _auth = AuthenticationService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('King´s Food'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Cerrar Sesión',
+            onPressed: () async{
+              await _auth.cerrarSesion().then((result){
+                print('cerrar sesion exitoso');
+                Navigator.of(context).pop(true);
+              }
+              );
+              //scaffoldKey.currentState.showSnackBar(snackBar);
+            },
+          )
+        ],
       ),
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

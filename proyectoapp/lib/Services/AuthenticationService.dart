@@ -9,7 +9,7 @@ class AuthenticationService{
 Future createNewUser(String email, String password) async {
   try{
     UserCredential result =  await _auth.createUserWithEmailAndPassword(
-          email: email.trim(), password: password);
+          email: email, password: password);
     User user = result.user;
     return user;
   }catch(e){
@@ -18,7 +18,24 @@ Future createNewUser(String email, String password) async {
 }
 
 //login 
-
+Future loginUser(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return result.user;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
 //desloguearse
+ Future cerrarSesion() async {
+    try {
+      return _auth.signOut();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  } 
+
 }
