@@ -4,6 +4,7 @@ import 'package:proyectoapp/home.dart';
 import 'package:proyectoapp/registro.dart';
 import 'package:proyectoapp/newpost.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:proyectoapp/Services/AuthenticationService.dart';
 
 class MiApp extends StatelessWidget {
   @override
@@ -19,11 +20,23 @@ class MiApp extends StatelessWidget {
 
 class Login extends StatelessWidget {
   final _key = GlobalKey<FormState>();
+  final AuthenticationService _auth = AuthenticationService();
   TextEditingController _correoController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+      void iniciarSesion() async {
+        dynamic authResult = await _auth.loginUser(_correoController.text,_passwordController.text);
+        if(authResult == null){
+          print('Error, no ha sido posible iniciar sesion');
+        }else{
+          _correoController.clear();
+          _passwordController.clear();
+          print("Inicio de sesion exitoso");
+          Navigator.pushNamed(context, '/home');
+        }
+      }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -135,8 +148,8 @@ class Login extends StatelessWidget {
                                     fontWeight: FontWeight.bold)),
                             onPressed: () {
                               if (_key.currentState.validate()) {
-                                Navigator.pushNamed(context, '/home');
-                                ;
+                                iniciarSesion();
+                                //Navigator.pushNamed(context, '/home');
                               }
                             },
                             shape: RoundedRectangleBorder(
@@ -184,4 +197,5 @@ class Login extends StatelessWidget {
           ])),
     );
   }
+
 }
