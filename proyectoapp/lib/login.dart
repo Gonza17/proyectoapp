@@ -13,7 +13,7 @@ class MiApp extends StatelessWidget {
       //'/': (context) => Login(),
       '/home': (context) => Home(),
       '/registro': (context) => RegistrationScreen(),
-      '/newpost': (context) => Newpost(),
+      //'/newpost': (context) => Newpost(),
     });
   }
 }
@@ -26,17 +26,19 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      void iniciarSesion() async {
-        dynamic authResult = await _auth.loginUser(_correoController.text,_passwordController.text);
-        if(authResult == null){
-          print('Error, no ha sido posible iniciar sesion');
-        }else{
-          _correoController.clear();
-          _passwordController.clear();
-          print("Inicio de sesion exitoso");
-          Navigator.pushNamed(context, '/home');
-        }
+    void iniciarSesion() async {
+      dynamic authResult = await _auth.loginUser(
+          _correoController.text, _passwordController.text);
+      if (authResult == null) {
+        print('Error, no ha sido posible iniciar sesion');
+      } else {
+        _correoController.clear();
+        _passwordController.clear();
+        print("Inicio de sesion exitoso");
+        Navigator.pushNamed(context, '/home');
       }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -197,5 +199,4 @@ class Login extends StatelessWidget {
           ])),
     );
   }
-
 }
