@@ -29,4 +29,13 @@ Future loginUser(String email, String password) async {
   }
 
 //desloguearse
+ Future cerrarSesion() async {
+    try {
+      return _auth.signOut();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  } 
+
 }
