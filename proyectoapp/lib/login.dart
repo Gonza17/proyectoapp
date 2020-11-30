@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MiApp extends StatelessWidget {
   @override
-  Widget build(BuildContext) {
+  Widget build(BuildContext context) {
     return MaterialApp(home: Login(), initialRoute: '/', routes: {
       //'/': (context) => Login(),
       '/home': (context) => Home(),
