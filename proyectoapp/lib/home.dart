@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyectoapp/DatabaseManager/DatabaseManager.dart';
 import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,7 +10,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
-
+  String userID = "";
+  String userEmail = "";
   final tabs = [
     Center(child: Text('home')),
     Center(child: Text('buscar')),
@@ -18,7 +20,19 @@ class _HomeState extends State<Home> {
     Center(child: Text('perfil')),
   ];
   final AuthenticationService _auth = AuthenticationService();
+  List userProfilesList = [];
 
+  @override
+
+  void initState() {
+    super.initState();
+    fetchUserInfo();
+  }
+  fetchUserInfo() async {
+    User getUser =  FirebaseAuth.instance.currentUser;
+    userID = getUser.uid;
+    userEmail = getUser.email;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +53,8 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
-      body: tabs[_currentIndex],
+      body:
+      tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: [
@@ -61,7 +76,7 @@ class _HomeState extends State<Home> {
               backgroundColor: Colors.yellow),
           BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'perfil',
+              label: userEmail,
               backgroundColor: Colors.green),
         ],
         onTap: (index) {
@@ -72,4 +87,5 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
 }
