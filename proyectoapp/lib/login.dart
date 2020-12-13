@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoapp/home.dart';
 import 'package:proyectoapp/registro.dart';
-import 'package:proyectoapp/newpost.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:proyectoapp/test_user.dart';
@@ -14,7 +13,7 @@ class MiApp extends StatelessWidget {
       //'/': (context) => Login(),
       '/home': (context) => Home(),
       '/registro': (context) => RegistrationScreen(),
-      '/test_user':(context) => TestUser(),
+      '/test_user': (context) => TestUser(),
       //'/newpost': (context) => Newpost(),
     });
   }
