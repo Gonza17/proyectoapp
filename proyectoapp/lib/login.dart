@@ -14,7 +14,6 @@ class MiApp extends StatelessWidget {
       '/home': (context) => Home(),
       '/registro': (context) => RegistrationScreen(),
       '/test_user': (context) => TestUser(),
-      //'/newpost': (context) => Newpost(),
     });
   }
 }
