@@ -25,7 +25,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    fetchUserInfo();
     controlador = new TabController(length: 5, vsync: this);
+  }
+
+  fetchUserInfo() async {
+    User getUser = FirebaseAuth.instance.currentUser;
+    userID = getUser.uid;
+    userEmail = getUser.email;
   }
 
   @override
@@ -33,6 +40,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
         appBar: new AppBar(
             title: new Text("King´s food"),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.logout),
+                tooltip: 'Cerrar Sesión',
+                onPressed: () async {
+                  await _auth.cerrarSesion().then((result) {
+                    print('cerrar sesion exitoso');
+                    Navigator.of(context).pop(true);
+                  });
+                },
+              )
+            ],
             bottom: new TabBar(
               tabs: <Widget>[
                 new Tab(icon: new Icon(Icons.home)),
