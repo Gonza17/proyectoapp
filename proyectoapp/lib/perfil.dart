@@ -1,8 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:proyectoapp/Services/AuthenticationService.dart';
+import 'package:proyectoapp/DatabaseManager/DatabaseManager.dart';
 
-class Perfil extends StatelessWidget {
+
+class Perfil extends StatefulWidget {
   @override
+  _PerfilState createState() => _PerfilState();
+}
+class _PerfilState extends State<Perfil> {
+  String userID = "";
+  String userEmail = "";
+  final AuthenticationService _auth = AuthenticationService();
+  @override
+
+  void initState() {
+    super.initState();
+    fetchUserInfo();
+  }
+  fetchUserInfo() async {
+    User getUser =  FirebaseAuth.instance.currentUser;
+    userID = getUser.uid;// ID DE LA PERSONA AUTENTIFICADA
+    userEmail = getUser.email;
+  }
+  @override 
   Widget build(BuildContext context) {
     return  Scaffold(
       body: Column(
@@ -14,6 +36,9 @@ class Perfil extends StatelessWidget {
             if(!snapshot.hasData) return Text('cargando informacion... espere un momento');
             return Column(
               children: <Widget>[
+                //Text(FirebaseFirestore.instance.collection("info_usuario").doc(userID).collection("nombre").get(), style: new TextStyle(fontSize: 45.0)),
+                //Text(snapshot.data.documents[0]['nombre'], style: new TextStyle(fontSize: 45.0))
+                Text(userID, style: new TextStyle(fontSize: 10.0)),
                 Text(snapshot.data.documents[0]['nombre'], style: new TextStyle(fontSize: 45.0))
               ]
             );
