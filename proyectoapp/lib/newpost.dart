@@ -30,7 +30,7 @@ class _Newpost extends State<Newpost> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          height: 200.0,
+          height: 300.0,
           child: Center(
             child: _image == null
                 ? Text('No image selected.')
