@@ -39,5 +39,8 @@ Future loginUser(String email, String password) async {
       return null;
     }
   } 
+  Future <String> getCurrentUID() async{
+    return ( _auth.currentUser).uid;
+  } 
 
 }

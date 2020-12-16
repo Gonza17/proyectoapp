@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +14,8 @@ class Perfil extends StatefulWidget {
 class _PerfilState extends State<Perfil> {
   String userID = "";
   String userEmail = "";
-  final AuthenticationService _auth = AuthenticationService();
+  //final AuthenticationService _auth = AuthenticationService();
+  
   @override
 
   void initState() {
@@ -30,16 +33,17 @@ class _PerfilState extends State<Perfil> {
       body: Column(
          children: [
         StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('info_usuario').snapshots() ,
+          stream: FirebaseFirestore.instance.collection("info_usuario").snapshots() ,
         
-          builder: (BuildContext context, AsyncSnapshot snapshot){
+          builder: (BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
             if(!snapshot.hasData) return Text('cargando informacion... espere un momento');
             return Column(
               children: <Widget>[
                 //Text(FirebaseFirestore.instance.collection("info_usuario").doc(userID).collection("nombre").get(), style: new TextStyle(fontSize: 45.0)),
                 //Text(snapshot.data.documents[0]['nombre'], style: new TextStyle(fontSize: 45.0))
-                Text(userID, style: new TextStyle(fontSize: 10.0)),
-                Text(snapshot.data.documents[0]['nombre'], style: new TextStyle(fontSize: 45.0))
+                //Text(),
+                Text(userID, style: new TextStyle(fontSize: 30.0)),
+                Text(snapshot.data.documentID, style: new TextStyle(fontSize: 45.0))
               ]
             );
           },

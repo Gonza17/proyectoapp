@@ -8,6 +8,7 @@ class DatabaseManager {
 
     });
   }
+  /*
   Future getUsersList() async {
     List itemsList = [];
 
@@ -23,4 +24,5 @@ class DatabaseManager {
       return null;
     }
   }
+  */
 }

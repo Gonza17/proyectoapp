@@ -4,8 +4,6 @@ import 'package:proyectoapp/home.dart';
 import 'package:proyectoapp/registro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyectoapp/Services/AuthenticationService.dart';
-import 'package:proyectoapp/test_user.dart';
-
 class MiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,7 +11,7 @@ class MiApp extends StatelessWidget {
       //'/': (context) => Login(),
       '/home': (context) => Home(),
       '/registro': (context) => RegistrationScreen(),
-      '/test_user': (context) => TestUser(),
+
     });
   }
 }
