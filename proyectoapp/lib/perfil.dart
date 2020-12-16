@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ class _PerfilState extends State<Perfil> {
       body: Column(
          children: [
         StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("info_usuario").snapshots() ,
+          stream: FirebaseFirestore.instance.collection('info_usuario').snapshots() ,
         
           builder: (BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
             if(!snapshot.hasData) return Text('cargando informacion... espere un momento');
@@ -43,7 +42,7 @@ class _PerfilState extends State<Perfil> {
                 //Text(snapshot.data.documents[0]['nombre'], style: new TextStyle(fontSize: 45.0))
                 //Text(),
                 Text(userID, style: new TextStyle(fontSize: 30.0)),
-                Text(snapshot.data.documentID, style: new TextStyle(fontSize: 45.0))
+                //Text(snapshot.data.documentID, style: new TextStyle(fontSize: 45.0))
               ]
             );
           },
@@ -118,7 +117,7 @@ class _PerfilState extends State<Perfil> {
               elevation: 2.0,
               child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 12,horizontal: 30),
-                  child: Text("Skill Sets",style: TextStyle(
+                  child: Text("Texto",style: TextStyle(
                       letterSpacing: 2.0,
                       fontWeight: FontWeight.w300
                   ),))
@@ -127,7 +126,7 @@ class _PerfilState extends State<Perfil> {
               height: 15,
             ),
             Text(
-              "App Developer || Digital Marketer"
+              "Texto || Texto"
               ,style: TextStyle(
                 fontSize: 18.0,
                 color:Colors.black45,
@@ -145,7 +144,7 @@ class _PerfilState extends State<Perfil> {
                     Expanded(
                       child: Column(
                         children: [
-                          Text("Project",
+                          Text("Recetas",
                             style: TextStyle(
                                 color: Colors.blueAccent,
                                 fontSize: 22.0,
@@ -167,7 +166,7 @@ class _PerfilState extends State<Perfil> {
                       child:
                       Column(
                         children: [
-                          Text("Followers",
+                          Text("Seguidores",
                             style: TextStyle(
                                 color: Colors.blueAccent,
                                 fontSize: 22.0,
