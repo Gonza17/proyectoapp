@@ -7,6 +7,23 @@ class Newpost extends StatefulWidget {
 }
 
 class _Newpost extends State<Newpost> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: new Center(
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            new camara(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class camara extends StatelessWidget {
   File _image;
 
   @override
