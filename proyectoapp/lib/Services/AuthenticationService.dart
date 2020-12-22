@@ -12,7 +12,7 @@ Future createNewUser(String nombre,String email, String password) async {
     UserCredential result =  await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
     User user = result.user;
-    await DatabaseManager().createUserData(nombre,user.uid);
+    await DatabaseManager().createUserData(nombre,user.uid,null,null);
     return user;
   }catch(e){
     print(e.toString());
