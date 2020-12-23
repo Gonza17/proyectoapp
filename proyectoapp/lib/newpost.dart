@@ -119,7 +119,8 @@ class _NewpostState extends State<Newpost> {
         _isInAsyncCall = true;
       });
       if (_foto != null) {
-        final StorageReference fireStoreRef = FirebaseStorage.instance
+        FirebaseStorage _storage = FirebaseStorage.instance;
+        StorageReference fireStoreRef = _storage
             .ref()
             .child('usuario')
             .child(userID)
