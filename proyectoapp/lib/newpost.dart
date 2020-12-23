@@ -24,6 +24,7 @@ class _NewpostState extends State<Newpost> {
   String urlFoto;
   bool _isInAsyncCall = false;
   String recetas;
+  Auth.auth = Auth();
 
   TextEditingController recetaInputController;
   TextEditingController tituloInputController;
@@ -36,6 +37,7 @@ class _NewpostState extends State<Newpost> {
   String uid;
   String receta;
   String usuario;
+  String nombre;
 
   Future capturaImagen(SelectSource option) async {
     File image;
@@ -111,17 +113,142 @@ class _NewpostState extends State<Newpost> {
               .ref()
               .child('usuarios')
               .child(usuario)
-              .child('recetas')
-              .child('$name.jpg');
+              .child('mycolrecipes')
+              .child('$nombre.jpg');
           final StorageUploadTask task = fireStoreRef.putFile(
-              _foto, StorageMetadata(contentType: 'Image/jpeg'));
+              _foto, StorageMetadata(contentType: 'image/jpeg'));
+          task.onComplete.then((onValue) {
+            onValue.ref.getDownloadURL().then((onValue) {
+              setState(() {
+                urlFoto = onValue.toString();
+                Firestore.instance
+                    .collection('usuarios')
+                    .document(usuario)
+                    .collection('receta')
+                    .add({
+                      'nombre': nombre,
+                      'image': urlFoto,
+                      'receta': receta,
+                    })
+                    .then((value) => Navigator.of(context).pop())
+                    .catchError((onError) =>
+                        print('Error al registrar su receta bd'));
+                _isInAsyncCall = false;
+              });
+            });
+          });
+        } else {
+          Firestore.instance
+              .collection('usuarios')
+              .document(usuario)
+              .collection('receta')
+              .add({
+                'nombre': nombre,
+                'image': urlFoto,
+                'receta': receta,
+              })
+              .then((value) => Navigator.of(context).pop())
+              .catchError(
+                  (onError) => print('Error al registrar su receta bd'));
+          _isInAsyncCall = false;
         }
-      });
+      }).catchError((onError) => _isInAsyncCall = false);
+
+      //
+
+    } else {
+      print('objeto no validado');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    
+    Commonthings.size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Add My Recipe'),
+      ),
+      body: ModalProgressHUD(
+        inAsyncCall: _isInAsyncCall,
+        opacity: 0.5,
+        dismissible: false,
+        progressIndicator: CircularProgressIndicator(),
+        color: Colors.blueGrey,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(left: 10, right: 15),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: GestureDetector(
+                        onTap: getImage,
+                      ),
+                      margin: EdgeInsets.only(top: 20),
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1.0, color: Colors.black),
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: _foto == null
+                                 
+                                  ? FileImage(_foto))),
+                    )
+                  ],
+                ),
+                Text('click para cambiar foto'),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'name',
+                    fillColor: Colors.grey[300],
+                    filled: true,
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                  },
+                  onSaved: (value) => nombre = value.trim(),
+                ),
+                TextFormField(
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'recipe',
+                    fillColor: Colors.grey[300],
+                    filled: true,
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some recipe';
+                    }
+                  },
+                  onSaved: (value) => receta = value,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: _enviar,
+                      child: Text('Create', style: TextStyle(color: Colors.white)),
+                      color: Colors.green,
+                    ),
+                  ],)
+              ],
+            ),
+          ),
+        ),
+      )
+    );
   }
 }
