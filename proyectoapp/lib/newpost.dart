@@ -209,7 +209,7 @@ class _NewpostState extends State<Newpost> {
                 TextFormField(
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'name',
+                    hintText: 'nombre',
                     fillColor: Colors.grey[300],
                     filled: true,
                   ),
