@@ -7,12 +7,12 @@ class AuthenticationService{
 
 //registro con correo y contraseña
 
-Future createNewUser(String nombre,String email, String password) async {
+Future createNewUser(String nombre,String email, String password,String ciudad) async {
   try{
     UserCredential result =  await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
     User user = result.user;
-    await DatabaseManager().createUserData(nombre,user.uid,null,null);
+    await DatabaseManager().createUserData(nombre,user.uid,ciudad,null,null);
     return user;
   }catch(e){
     print(e.toString());

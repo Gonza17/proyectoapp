@@ -13,6 +13,8 @@ class Perfil extends StatefulWidget {
 class _PerfilState extends State<Perfil> {
   String userID = "";
   String userEmail = "";
+  String _itemCiudad;
+  List<DropdownMenuItem<String>> _ciudadItems;
   //final AuthenticationService _auth = AuthenticationService();
   
   @override
@@ -20,17 +22,55 @@ class _PerfilState extends State<Perfil> {
   void initState() {
     super.initState();
     fetchUserInfo();
+    _ciudadItems = getCiudadItems();
+      _itemCiudad = _ciudadItems[0].value;
   }
   fetchUserInfo() async {
     User getUser =  FirebaseAuth.instance.currentUser;
     userID = getUser.uid;// ID DE LA PERSONA AUTENTIFICADA
     userEmail = getUser.email;
   }
+
+  getData() async {
+    return await FirebaseFirestore.instance.collection('info_usuario').get();
+  }
+
+  //Dropdownlist from firestore
+   List<DropdownMenuItem<String>> getCiudadItems() {
+    List<DropdownMenuItem<String>> items = List();
+    QuerySnapshot dataCiudades;
+    getData().then((data) {
+      
+      dataCiudades = data;
+      //print(dataCiudades.docs[0]['nombre']);
+      dataCiudades.docs.forEach((obj) {
+        if((obj.id)==userID){
+          print('Usuario encontrado!!! ${obj.id} ${obj['nombre']} ${obj['ciudad']}'); 
+        }
+        //print('${obj.id} ${obj['nombre']}');
+        items.add(DropdownMenuItem(
+          value: obj.id,
+          
+          child: Text(obj['nombre'],style: TextStyle(color: Colors.black)),
+        ));
+      });
+    }).catchError((error) => print('hay un error.....' + error));
+
+    items.add(DropdownMenuItem(
+      value: '0',
+      child: Text('- Seleccione -', style: TextStyle(color: Colors.white),) ,
+    ));
+
+    return items;
+  }
   @override 
   Widget build(BuildContext context) {
     return  Scaffold(
       body: Column(
          children: [
+        
+        
+        
         StreamBuilder(
           stream: FirebaseFirestore.instance.collection('info_usuario').snapshots() ,
         
@@ -39,7 +79,7 @@ class _PerfilState extends State<Perfil> {
             return Column(
               children: <Widget>[
                 //Text(FirebaseFirestore.instance.collection("info_usuario").doc(userID).collection("nombre").get(), style: new TextStyle(fontSize: 45.0)),
-                //Text(snapshot.data.documents[0]['nombre'], style: new TextStyle(fontSize: 45.0))
+                Text(snapshot.data.docs[0]['nombre'], style: new TextStyle(fontSize: 45.0)),
                 //Text(),
                 Text(userID, style: new TextStyle(fontSize: 30.0)),
                 //Text(snapshot.data.documentID, style: new TextStyle(fontSize: 45.0))
@@ -47,6 +87,9 @@ class _PerfilState extends State<Perfil> {
             );
           },
         ),
+
+
+
         Column(
           
           children: [

@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseManager {
   final CollectionReference profileList = FirebaseFirestore.instance.collection('info_usuario');
-  Future<void>createUserData(String nombre,String uid,String pais, String descripcion) async{
+  Future<void>createUserData(String nombre,String uid,String ciudad,String pais, String descripcion) async{
     return await profileList.doc(uid).set({
       'nombre': nombre,
       'id_usuario': uid,
+      'ciudad':ciudad,
       'pais': pais,
       'descripcion': descripcion,
 

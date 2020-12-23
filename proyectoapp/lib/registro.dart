@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:proyectoapp/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 class RegistrationScreen extends StatefulWidget {
@@ -14,20 +14,56 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _key = GlobalKey<FormState>();
   final AuthenticationService _auth = AuthenticationService();
-
+   String _itemCiudad;
 
   TextEditingController _nombreController = TextEditingController();
   TextEditingController _emailContoller = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _edadController = TextEditingController();
-
+  TextEditingController _ciudadController = TextEditingController();
+  List<DropdownMenuItem<String>> _ciudadItems;
   @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _ciudadItems = getCiudadItems();
+      _itemCiudad = _ciudadItems[0].value;
+    });
+  }
+  getData() async {
+    return await FirebaseFirestore.instance.collection('ciudades').get();
+  }
+
+  //Dropdownlist from firestore
+   List<DropdownMenuItem<String>> getCiudadItems() {
+    List<DropdownMenuItem<String>> items = List();
+    QuerySnapshot dataCiudades;
+    getData().then((data) {
+      
+      dataCiudades = data;
+      dataCiudades.docs.forEach((obj) {
+        print('${obj.id} ${obj['nombre']}');
+        items.add(DropdownMenuItem(
+          value: obj.id,
+          
+          child: Text(obj['nombre'],style: TextStyle(color: Colors.black)),
+        ));
+      });
+    }).catchError((error) => print('hay un error.....' + error));
+
+    items.add(DropdownMenuItem(
+      value: '0',
+      child: Text('- Seleccione -', style: TextStyle(color: Colors.white),) ,
+    ));
+
+    return items;
+  }
   Widget build(BuildContext context) {
     Query query = FirebaseFirestore.instance.collection("Usuarios");
     return Scaffold(
       backgroundColor: Colors.white,
-      
       body: Container(
+        
         //height: 400,
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -105,6 +141,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                       ),
                       SizedBox(height: 30),
+                      DropdownButtonFormField(
+                        
+                        validator: (value) =>
+                        value == '0' ? 'Debe seleccionar una ciudad' : null,
+                        decoration: InputDecoration(
+                            labelText: 'Ciudad', icon: Icon(FontAwesomeIcons.city,color: Colors.white),
+                            labelStyle: TextStyle(color: Colors.white)),
+                            
+                        value: _itemCiudad,
+                        items: _ciudadItems,
+                        onChanged: (value) {
+                          setState(() {
+                            _itemCiudad = value;
+                          });
+                        }, //seleccionarCiudadItem,
+                        
+                        onSaved: (value) => _itemCiudad = value,
+                      ),
                       TextFormField(
                         controller: _edadController,
                         validator: (value) {
@@ -155,7 +209,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
   void registrar() async{
-    dynamic result = await _auth.createNewUser(_nombreController.text,_emailContoller.text,_passwordController.text);
+    dynamic result = await _auth.createNewUser(_nombreController.text,_emailContoller.text,_passwordController.text,_itemCiudad);
     if(result==null){
       print('email no es valido');
     }else{
