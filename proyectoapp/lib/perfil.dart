@@ -14,6 +14,10 @@ class _PerfilState extends State<Perfil> {
   String userID = "";
   String userEmail = "";
   String _itemCiudad;
+
+  String nombre_user = "";
+  String ciudad_user = "";
+  String descripcion_user= "";
   List<DropdownMenuItem<String>> _ciudadItems;
   //final AuthenticationService _auth = AuthenticationService();
   
@@ -22,8 +26,7 @@ class _PerfilState extends State<Perfil> {
   void initState() {
     super.initState();
     fetchUserInfo();
-    _ciudadItems = getCiudadItems();
-      _itemCiudad = _ciudadItems[0].value;
+    getUsuarioItems();
   }
   fetchUserInfo() async {
     User getUser =  FirebaseAuth.instance.currentUser;
@@ -36,59 +39,28 @@ class _PerfilState extends State<Perfil> {
   }
 
   //Dropdownlist from firestore
-   List<DropdownMenuItem<String>> getCiudadItems() {
-    List<DropdownMenuItem<String>> items = List();
-    QuerySnapshot dataCiudades;
+   List<DropdownMenuItem<String>> getUsuarioItems() {
+    QuerySnapshot dataUsuario;
     getData().then((data) {
       
-      dataCiudades = data;
+      dataUsuario = data;
       //print(dataCiudades.docs[0]['nombre']);
-      dataCiudades.docs.forEach((obj) {
+      dataUsuario.docs.forEach((obj) {
         if((obj.id)==userID){
-          print('Usuario encontrado!!! ${obj.id} ${obj['nombre']} ${obj['ciudad']}'); 
-        }
-        //print('${obj.id} ${obj['nombre']}');
-        items.add(DropdownMenuItem(
-          value: obj.id,
           
-          child: Text(obj['nombre'],style: TextStyle(color: Colors.black)),
-        ));
+          nombre_user = obj['nombre'];
+          ciudad_user = obj['ciudad'];
+          descripcion_user = obj['descripcion'];
+          print('Usuario encontrado!!! $nombre_user $ciudad_user'); 
+        }
       });
     }).catchError((error) => print('hay un error.....' + error));
-
-    items.add(DropdownMenuItem(
-      value: '0',
-      child: Text('- Seleccione -', style: TextStyle(color: Colors.white),) ,
-    ));
-
-    return items;
   }
   @override 
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: Column(
-         children: [
-        
-        
-        
-        StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('info_usuario').snapshots() ,
-        
-          builder: (BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
-            if(!snapshot.hasData) return Text('cargando informacion... espere un momento');
-            return Column(
-              children: <Widget>[
-                //Text(FirebaseFirestore.instance.collection("info_usuario").doc(userID).collection("nombre").get(), style: new TextStyle(fontSize: 45.0)),
-                Text(snapshot.data.docs[0]['nombre'], style: new TextStyle(fontSize: 45.0)),
-                //Text(),
-                Text(userID, style: new TextStyle(fontSize: 30.0)),
-                //Text(snapshot.data.documentID, style: new TextStyle(fontSize: 45.0))
-              ]
-            );
-          },
-        ),
-
-
+      body: SingleChildScrollView(
+         child:
 
         Column(
           
@@ -120,8 +92,8 @@ class _PerfilState extends State<Perfil> {
               height: 60,
             ),
             Text(
-              "Nombre Apellido"
-              ,style: TextStyle(
+              nombre_user,
+              style: TextStyle(
                 fontSize: 25.0,
                 color:Colors.blueGrey,
                 letterSpacing: 2.0,
@@ -132,7 +104,7 @@ class _PerfilState extends State<Perfil> {
               height: 10,
             ),
             Text(
-              "Talca, Chile"
+              ciudad_user
               ,style: TextStyle(
                 fontSize: 18.0,
                 color:Colors.black45,
@@ -144,7 +116,7 @@ class _PerfilState extends State<Perfil> {
               height: 10,
             ),
             Text(
-              "Estudiante"
+              descripcion_user
               ,style: TextStyle(
                 fontSize: 15.0,
                 color:Colors.black45,
@@ -301,7 +273,7 @@ class _PerfilState extends State<Perfil> {
             )
           ],
         ),
-         ],
+         
       )
     );
   }
