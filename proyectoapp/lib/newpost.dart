@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Commonthings {
   static Size size;
@@ -42,6 +42,7 @@ class _NewpostState extends State<Newpost> {
   TextEditingController recetaInputController;
   TextEditingController nombreInputController;
   TextEditingController imageInputController;
+  TextEditingController ingredientesInputController;
 
   String id;
   final db = Firestore.instance;
@@ -50,6 +51,7 @@ class _NewpostState extends State<Newpost> {
   String uid;
   String receta;
   String usuario;
+  String ingredientes;
 
   Future CaptureIamgen(SelectSource opcion) async {
     File image;
@@ -111,10 +113,127 @@ class _NewpostState extends State<Newpost> {
     return false;
   }
 
-  void enviar() {}
+  void enviar() {
+    if (_validarlo()) {
+      setState(() {
+        _isInAsyncCall = true;
+      });
+      if (_foto != null) {
+        final StorageReference fireStoreRef = FirebaseStorage.instance
+            .ref()
+            .child('usuario')
+            .child(userID)
+            .child('recetas')
+            .child('$name.jpg');
+        final StorageUploadTask task = fireStoreRef.putFile(
+          
+        )
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    Commonthings.size = MediaQuery.of(context).size;
+
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Add My Recipe'),
+        ),
+        body: ModalProgressHUD(
+          inAsyncCall: _isInAsyncCall,
+          opacity: 0.5,
+          dismissible: false,
+          progressIndicator: CircularProgressIndicator(),
+          color: Colors.blueGrey,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(left: 10, right: 15),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        child: GestureDetector(
+                          onTap: getImage,
+                        ),
+                        margin: EdgeInsets.only(top: 20),
+                        height: 120,
+                        width: 120,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1.0, color: Colors.black),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: _foto == null
+                                    ? AssetImage('assets/images/azucar.gif')
+                                    : FileImage(_foto))),
+                      )
+                    ],
+                  ),
+                  Text('click para cambiar foto'),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'titulo de la receta',
+                      fillColor: Colors.grey[300],
+                      filled: true,
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'porfavor ingrese algún titulo aquí';
+                      }
+                    },
+                    onSaved: (value) => nombre = value.trim(),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'ingredientes de la receta',
+                      fillColor: Colors.grey[300],
+                      filled: true,
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'porfavor ingrese algún ingrediente aquí';
+                      }
+                    },
+                    onSaved: (value) => ingredientes = value.trim(),
+                  ),
+                  TextFormField(
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'receta',
+                      fillColor: Colors.grey[300],
+                      filled: true,
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'porfavor ingrese alguna receta aquí';
+                      }
+                    },
+                    onSaved: (value) => receta = value,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      RaisedButton(
+                        onPressed: enviar,
+                        child: Text('Create',
+                            style: TextStyle(color: Colors.white)),
+                        color: Colors.green,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
