@@ -14,7 +14,7 @@ class _PerfilState extends State<Perfil> {
   String userID = "";
   String userEmail = "";
   String _itemCiudad;
-  
+
   String nombre_user = "";
   String ciudad_user = "";
   String descripcion_user= "";
@@ -96,7 +96,7 @@ class _PerfilState extends State<Perfil> {
             SizedBox(
               height: 60,
             ),
-            TextField(
+            Text(
               nombre_user,
               style: TextStyle(
                 fontSize: 25.0,
