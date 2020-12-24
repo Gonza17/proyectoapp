@@ -14,7 +14,7 @@ class _PerfilState extends State<Perfil> {
   String userID = "";
   String userEmail = "";
   String _itemCiudad;
-
+  
   String nombre_user = "";
   String ciudad_user = "";
   String descripcion_user= "";
@@ -26,14 +26,18 @@ class _PerfilState extends State<Perfil> {
   void initState() {
     super.initState();
     fetchUserInfo();
-    getUsuarioItems();
+    //getUsuarioItems();
   }
   fetchUserInfo() async {
-    User getUser =  FirebaseAuth.instance.currentUser;
+    User getUser =  FirebaseAuth.instance.currentUser;    
     userID = getUser.uid;// ID DE LA PERSONA AUTENTIFICADA
     userEmail = getUser.email;
+    DocumentSnapshot usuario_actual = await FirebaseFirestore.instance.collection('info_usuario').doc(userID).get();//informacion de la persona autentificada
+    nombre_user = usuario_actual['nombre'];
+    ciudad_user = usuario_actual['ciudad'];
+    descripcion_user = usuario_actual['descripcion'];
   }
-
+/*
   getData() async {
     return await FirebaseFirestore.instance.collection('info_usuario').get();
   }
@@ -51,11 +55,12 @@ class _PerfilState extends State<Perfil> {
           nombre_user = obj['nombre'];
           ciudad_user = obj['ciudad'];
           descripcion_user = obj['descripcion'];
-          print('Usuario encontrado!!! $nombre_user $ciudad_user'); 
+          //print('Usuario encontrado!!! $nombre_user $ciudad_user'); 
         }
       });
     }).catchError((error) => print('hay un error.....' + error));
   }
+  */
   @override 
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -91,7 +96,7 @@ class _PerfilState extends State<Perfil> {
             SizedBox(
               height: 60,
             ),
-            Text(
+            TextField(
               nombre_user,
               style: TextStyle(
                 fontSize: 25.0,
