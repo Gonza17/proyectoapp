@@ -113,7 +113,7 @@ class _NewpostState extends State<Newpost> {
     return false;
   }
 
-   enviar() async{
+  enviar() async {
     String imageUrl;
     if (_validarlo()) {
       setState(() {
@@ -129,12 +129,37 @@ class _NewpostState extends State<Newpost> {
             .child('$nombre.jpg')
             .putFile(_foto);
 
-             var downloadUrl = await fireStoreRef.ref.getDownloadURL();
+        var downloadUrl = await fireStoreRef.ref.getDownloadURL();
 
         setState(() {
           imageUrl = downloadUrl;
+          Firestore.instance
+              .collection('recetas')
+              .add({
+                'uid': userID,
+                'nombre': nombre,
+                'image': urlFoto,
+                'receta': receta
+              })
+              .then((value) => Navigator.of(context).pop())
+              .catchError((onError) =>
+                  print('error en registrar la receta del usuario'));
+          _isInAsyncCall = false;
         });
         print(imageUrl);
+      } else {
+        Firestore.instance
+            .collection('recetas')
+            .add({
+              'uid': userID,
+              'nombre': nombre,
+              'image': urlFoto,
+              'receta': receta
+            })
+            .then((value) => Navigator.of(context).pop())
+            .catchError(
+                (onError) => print('error al registrar la receta de usuario'));
+        _isInAsyncCall = false;
       }
     }
   }
@@ -230,8 +255,7 @@ class _NewpostState extends State<Newpost> {
                     child:
                         Text('Create', style: TextStyle(color: Colors.white)),
                     color: Colors.green,
-                    onPressed:() => enviar(),
-                    
+                    onPressed: () => enviar(),
                   ),
                 ],
               )
