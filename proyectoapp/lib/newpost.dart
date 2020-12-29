@@ -113,24 +113,30 @@ class _NewpostState extends State<Newpost> {
     return false;
   }
 
-  void enviar() {
-    /*if (_validarlo()) {
+   enviar() async{
+    String imageUrl;
+    if (_validarlo()) {
       setState(() {
         _isInAsyncCall = true;
       });
       if (_foto != null) {
-        FirebaseStorage _storage = FirebaseStorage.instance;
-        StorageReference fireStoreRef = _storage
+        final _storage = FirebaseStorage.instance;
+        var fireStoreRef = await _storage
             .ref()
             .child('usuario')
             .child(userID)
             .child('recetas')
-            .child('$name.jpg');
-        final StorageUploadTask task = fireStoreRef.putFile(
-          
-        )
+            .child('$nombre.jpg')
+            .putFile(_foto);
+
+             var downloadUrl = await fireStoreRef.ref.getDownloadURL();
+
+        setState(() {
+          imageUrl = downloadUrl;
+        });
+        print(imageUrl);
       }
-    }*/
+    }
   }
 
   @override
@@ -221,10 +227,11 @@ class _NewpostState extends State<Newpost> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RaisedButton(
-                    onPressed: enviar,
                     child:
                         Text('Create', style: TextStyle(color: Colors.white)),
                     color: Colors.green,
+                    onPressed:() => enviar(),
+                    
                   ),
                 ],
               )
