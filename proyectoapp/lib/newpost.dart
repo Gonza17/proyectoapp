@@ -132,29 +132,25 @@ class _NewpostState extends State<Newpost> {
 
         setState(() {
           urlFoto = downloadUrl;
-          Firestore.instance
-              .collection('recetas')
-              .add({
-                'uid': userID,
-                'nombre': nombre,
-                'image': urlFoto,
-                'receta': receta
-              })
-             ;/* .then((value) => Navigator.of(context).pop())
+          Firestore.instance.collection('recetas').add({
+            'uid': userID,
+            'nombre': nombre,
+            'image': urlFoto,
+            'receta': receta
+          });
+          /* .then((value) => Navigator.of(context).pop())
               .catchError((onError) =>
                   print('error en registrar la receta del usuario'));*/
           _isInAsyncCall = false;
         });
       } else {
-        Firestore.instance
-            .collection('recetas')
-            .add({
-              'uid': userID,
-              'nombre': nombre,
-              'image': urlFoto,
-              'receta': receta
-            })
-            ;/*.then((value) => Navigator.pushNamed(context, '/home')
+        Firestore.instance.collection('recetas').add({
+          'uid': userID,
+          'nombre': nombre,
+          'image': urlFoto,
+          'receta': receta
+        });
+        /*.then((value) => Navigator.pushNamed(context, '/home')
             .catchError(
                 (onError) => print('error al registrar la receta de usuario')));*/
         _isInAsyncCall = false;
@@ -250,14 +246,13 @@ class _NewpostState extends State<Newpost> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RaisedButton(
-                    child:
-                        Text('Crear Receta', style: TextStyle(color: Colors.white)),
-                    color: Colors.green,
-                    onPressed: (){
-                      enviar();
-                      Navigator.pushNamed(context, '/home');
-                    }
-                  ),
+                      child: Text('Crear Receta',
+                          style: TextStyle(color: Colors.white)),
+                      color: Colors.green,
+                      onPressed: () {
+                        enviar();
+                        Navigator.pushNamed(context, '/home');
+                      }),
                 ],
               )
             ],
