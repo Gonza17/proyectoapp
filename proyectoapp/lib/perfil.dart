@@ -18,6 +18,7 @@ class _PerfilState extends State<Perfil> {
   String nombre_user = "";
   String ciudad_user = "";
   String descripcion_user= "";
+  String imagen_perfil_user="";
   List<DropdownMenuItem<String>> _ciudadItems;
   //final AuthenticationService _auth = AuthenticationService();
   
@@ -35,6 +36,7 @@ class _PerfilState extends State<Perfil> {
     DocumentSnapshot usuario_actual = await FirebaseFirestore.instance.collection('info_usuario').doc(userID).get();//informacion de la persona autentificada
     nombre_user = usuario_actual['nombre'];
     ciudad_user = usuario_actual['ciudad'];
+    imagen_perfil_user = usuario_actual['imagen_perfil'];
     descripcion_user = usuario_actual['descripcion'];
   }
 /*
@@ -86,8 +88,8 @@ class _PerfilState extends State<Perfil> {
                 alignment: Alignment(0.0,2.5),
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(
-                      "https://st2.depositphotos.com/1341440/7182/v/950/depositphotos_71824861-stock-illustration-chef-hat-vector-black-silhouette.jpg "
-                  ),
+                      "$imagen_perfil_user"
+                      ),
                   radius: 60.0,
                 ),
               ),

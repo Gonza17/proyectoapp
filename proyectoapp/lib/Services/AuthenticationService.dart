@@ -12,7 +12,7 @@ Future createNewUser(String nombre,String email, String password,String ciudad) 
     UserCredential result =  await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
     User user = result.user;
-    await DatabaseManager().createUserData(nombre,user.uid,ciudad,'','');
+    await DatabaseManager().createUserData(nombre,user.uid,ciudad,'','','https://s1.eestatic.com/2015/03/31/cocinillas/Cocinillas_22257914_116018278_1024x576.jpg');
     return user;
   }catch(e){
     print(e.toString());
