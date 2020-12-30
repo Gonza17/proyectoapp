@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,6 +112,9 @@ class _PerfilState extends State<Perfil> {
     }).catchError((error) => print('hay un error.....' + error));
   }
   */
+
+  void cambiar_imagen() async {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
