@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -120,12 +121,13 @@ class _PerfilState extends State<Perfil> {
 
     if (_foto != null) {
         final _storage = FirebaseStorage.instance;
+        var numero_random = new Random().nextInt(100000);
         var fireStoreRef = await _storage
             .ref()
             .child('usuario')
             .child(userID)
             .child('perfil')
-            .child('foto_perfil.jpg')
+            .child('$numero_random.jpg')
             .putFile(_foto);
 
         var downloadUrl = await fireStoreRef.ref.getDownloadURL();
@@ -163,7 +165,7 @@ class _PerfilState extends State<Perfil> {
                   backgroundImage: NetworkImage("$imagen_perfil_user"),
                   radius: 60.0,
                   child: GestureDetector(
-                      onTap: getImagen,
+                      onTap: getImagen, 
                     )
                 ),
               ),
