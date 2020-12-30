@@ -129,9 +129,9 @@ class _NewpostState extends State<Newpost> {
             .putFile(_foto);
 
         var downloadUrl = await fireStoreRef.ref.getDownloadURL();
-
+        urlFoto = downloadUrl;
         setState(() {
-          urlFoto = downloadUrl;
+          
           Firestore.instance.collection('recetas').add({
             'uid': userID,
             'nombre': nombre,

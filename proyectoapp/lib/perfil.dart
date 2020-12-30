@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +16,7 @@ enum SelectSource { camara, galeria }
 
 class _PerfilState extends State<Perfil> {
   File _foto;
-  String urlfoto;
+  String urlFoto="";
   String userID = "";
   String userEmail = "";
   String _itemCiudad;
@@ -34,7 +35,7 @@ class _PerfilState extends State<Perfil> {
     //getUsuarioItems();
   }
 
-  Future CaptureIamgen(SelectSource opcion) async {
+  Future CaptureImagen(SelectSource opcion) async {
     File image;
 
     opcion == SelectSource.camara
@@ -53,16 +54,16 @@ class _PerfilState extends State<Perfil> {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            CaptureIamgen(SelectSource.camara);
+            CaptureImagen(SelectSource.camara);
             Navigator.of(context, rootNavigator: true).pop();
           },
           child: Row(
-            children: <Widget>[Text('Camcara'), Icon(Icons.camera)],
+            children: <Widget>[Text('Camara'), Icon(Icons.camera)],
           ),
         ),
         FlatButton(
           onPressed: () {
-            CaptureIamgen(SelectSource.galeria);
+            CaptureImagen(SelectSource.galeria);
             Navigator.of(context, rootNavigator: true).pop();
           },
           child: Row(
@@ -71,7 +72,9 @@ class _PerfilState extends State<Perfil> {
         )
       ],
     );
+    cambiar_imagen();
     showDialog(context: context, child: alerta);
+    
   }
 
   fetchUserInfo() async {
@@ -113,7 +116,31 @@ class _PerfilState extends State<Perfil> {
   }
   */
 
-  cambiar_imagen() async {}
+  cambiar_imagen() async {
+
+    if (_foto != null) {
+        final _storage = FirebaseStorage.instance;
+        var fireStoreRef = await _storage
+            .ref()
+            .child('usuario')
+            .child(userID)
+            .child('perfil')
+            .child('foto_perfil.jpg')
+            .putFile(_foto);
+
+        var downloadUrl = await fireStoreRef.ref.getDownloadURL();
+        urlFoto = downloadUrl;
+        print(urlFoto);
+        updateImagen();
+      }
+  }
+
+  Future updateImagen() async {
+  CollectionReference perfil_usuario = FirebaseFirestore.instance.collection('info_usuario');
+      return await perfil_usuario.doc(userID).update({
+        'imagen_perfil': urlFoto,
+       });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +162,9 @@ class _PerfilState extends State<Perfil> {
                 child: CircleAvatar(
                   backgroundImage: NetworkImage("$imagen_perfil_user"),
                   radius: 60.0,
+                  child: GestureDetector(
+                      onTap: getImagen,
+                    )
                 ),
               ),
             ),
