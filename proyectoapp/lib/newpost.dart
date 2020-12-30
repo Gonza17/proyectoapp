@@ -114,7 +114,6 @@ class _NewpostState extends State<Newpost> {
   }
 
   enviar() async {
-    String imageUrl;
     if (_validarlo()) {
       setState(() {
         _isInAsyncCall = true;
@@ -132,7 +131,7 @@ class _NewpostState extends State<Newpost> {
         var downloadUrl = await fireStoreRef.ref.getDownloadURL();
 
         setState(() {
-          imageUrl = downloadUrl;
+          urlFoto = downloadUrl;
           Firestore.instance
               .collection('recetas')
               .add({
@@ -141,12 +140,11 @@ class _NewpostState extends State<Newpost> {
                 'image': urlFoto,
                 'receta': receta
               })
-              .then((value) => Navigator.of(context).pop())
+             ;/* .then((value) => Navigator.of(context).pop())
               .catchError((onError) =>
-                  print('error en registrar la receta del usuario'));
+                  print('error en registrar la receta del usuario'));*/
           _isInAsyncCall = false;
         });
-        print(imageUrl);
       } else {
         Firestore.instance
             .collection('recetas')
@@ -156,9 +154,9 @@ class _NewpostState extends State<Newpost> {
               'image': urlFoto,
               'receta': receta
             })
-            .then((value) => Navigator.of(context).pop())
+            ;/*.then((value) => Navigator.pushNamed(context, '/home')
             .catchError(
-                (onError) => print('error al registrar la receta de usuario'));
+                (onError) => print('error al registrar la receta de usuario')));*/
         _isInAsyncCall = false;
       }
     }
@@ -253,9 +251,12 @@ class _NewpostState extends State<Newpost> {
                 children: <Widget>[
                   RaisedButton(
                     child:
-                        Text('Create', style: TextStyle(color: Colors.white)),
+                        Text('Crear Receta', style: TextStyle(color: Colors.white)),
                     color: Colors.green,
-                    onPressed: () => enviar(),
+                    onPressed: (){
+                      enviar();
+                      Navigator.pushNamed(context, '/home');
+                    }
                   ),
                 ],
               )
