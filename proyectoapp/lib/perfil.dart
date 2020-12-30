@@ -113,7 +113,7 @@ class _PerfilState extends State<Perfil> {
   }
   */
 
-  void cambiar_imagen() async {}
+  cambiar_imagen() async {}
 
   @override
   Widget build(BuildContext context) {
