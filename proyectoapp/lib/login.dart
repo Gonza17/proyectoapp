@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:proyectoapp/editar_perfil.dart';
 import 'package:proyectoapp/home.dart';
 import 'package:proyectoapp/registro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ class MiApp extends StatelessWidget {
     return MaterialApp(home: Login(), initialRoute: '/', routes: {
       //'/': (context) => Login(),
       '/home': (context) => Home(),
+      '/editar_perfil':(context)=>Editar_Perfil(),
       '/registro': (context) => RegistrationScreen(),
 
     });

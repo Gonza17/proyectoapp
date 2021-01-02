@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:proyectoapp/editar_perfil.dart';
 import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:proyectoapp/DatabaseManager/DatabaseManager.dart';
 
@@ -207,16 +208,16 @@ class _PerfilState extends State<Perfil> {
           SizedBox(
             height: 10,
           ),
-          Card(
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-              elevation: 2.0,
-              child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 30),
-                  child: Text(
-                    "Texto",
-                    style: TextStyle(
-                        letterSpacing: 2.0, fontWeight: FontWeight.w300),
-                  ))),
+
+          RaisedButton(
+            child: Text("Editar perfil",
+                style: TextStyle(letterSpacing: 2.0, fontWeight: FontWeight.w300)),
+            color: Colors.white,
+            onPressed: () {
+
+                Navigator.pushNamed(context, '/editar_perfil');
+              }
+          ),
           SizedBox(
             height: 15,
           ),
