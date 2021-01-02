@@ -4,7 +4,6 @@ import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyectoapp/inicio.dart';
 import 'package:proyectoapp/busqueda.dart';
-import 'package:proyectoapp/mensajes.dart';
 import 'package:proyectoapp/newpost.dart';
 import 'package:proyectoapp/perfil.dart';
 
@@ -26,7 +25,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     fetchUserInfo();
-    controlador = new TabController(length: 5, vsync: this);
+    controlador = new TabController(length: 4, vsync: this);
   }
 
   fetchUserInfo() async {
