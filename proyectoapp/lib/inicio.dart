@@ -75,7 +75,7 @@ class _InicioState extends State<Inicio> {
                                       child: FadeInImage(
                                         fit: BoxFit.cover,
                                         width: 380,
-                                        height: 220,
+                                        height: 320,
                                         placeholder: AssetImage(
                                             'assets/images/azucar.gif'),
                                         image: NetworkImage(document["image"]),
@@ -88,7 +88,7 @@ class _InicioState extends State<Inicio> {
                                     bottom: 10.0,
                                     child: Container(
                                       height: 40.0,
-                                      width: 325.0,
+                                      width: 375.0,
                                       decoration: BoxDecoration(
                                           gradient: LinearGradient(
                                               colors: [
