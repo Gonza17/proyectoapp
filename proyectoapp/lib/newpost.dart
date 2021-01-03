@@ -131,11 +131,11 @@ class _NewpostState extends State<Newpost> {
         var downloadUrl = await fireStoreRef.ref.getDownloadURL();
         urlFoto = downloadUrl;
         setState(() {
-          
           Firestore.instance.collection('recetas').add({
             'uid': userID,
             'nombre': nombre,
             'image': urlFoto,
+            'ingredientes': ingredientes,
             'receta': receta
           });
           /* .then((value) => Navigator.of(context).pop())
@@ -148,6 +148,7 @@ class _NewpostState extends State<Newpost> {
           'uid': userID,
           'nombre': nombre,
           'image': urlFoto,
+          'ingredientes': ingredientes,
           'receta': receta
         });
         /*.then((value) => Navigator.pushNamed(context, '/home')
