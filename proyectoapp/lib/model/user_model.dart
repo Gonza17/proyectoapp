@@ -1,15 +1,12 @@
 class Usuario {
-  Usuario(
-      {this.uid,
-      this.foto,
-      this.ciudad,
-      this.email,
-      this.nombre,
-      this.password});
-  String uid;
-  String foto;
-  String ciudad;
-  String email;
+  
   String nombre;
-  String password;
+  String id_usuario;
+  String ciudad;
+  String pais;
+  String descripcion;
+  String imagen_perfil;
+
+  Usuario ({this.nombre,this.id_usuario,this.ciudad,this.pais,this.descripcion,this.imagen_perfil});
+  
 }

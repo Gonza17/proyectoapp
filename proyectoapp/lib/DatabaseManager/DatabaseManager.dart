@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:proyectoapp/model/user_model.dart';
 
 class DatabaseManager {
   final CollectionReference profileList = FirebaseFirestore.instance.collection('info_usuario');
@@ -28,5 +29,22 @@ class DatabaseManager {
       return null;
     }
   }
+
+  Future getInfoUsuario(String uid) async{
+    DocumentSnapshot usuario_actual = await FirebaseFirestore.instance
+        .collection('info_usuario')
+        .doc(uid)
+        .get();
+        Usuario usuario = Usuario(
+          nombre: usuario_actual['nombre'],
+          ciudad: usuario_actual['ciudad'],
+          descripcion: usuario_actual['descripcion'],
+          imagen_perfil :usuario_actual['imagen_perfil'],     
+        );
+        return usuario;
+        
+  } 
+
+
   
 }

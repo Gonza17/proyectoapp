@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:proyectoapp/DatabaseManager/DatabaseManager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:proyectoapp/model/user_model.dart';
 class Editar_Perfil extends StatefulWidget {
   @override
   _EditarPerfil createState() => _EditarPerfil();
@@ -19,20 +19,41 @@ enum SelectSource { camara, galeria }
 class _EditarPerfil extends State<Editar_Perfil>{
   final _key = GlobalKey<FormState>();
   final AuthenticationService _auth = AuthenticationService();
-   String _itemCiudad;
   TextEditingController _nombreController = TextEditingController();
   TextEditingController _emailContoller = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _edadController = TextEditingController();
+  TextEditingController _PaisController = TextEditingController();
   TextEditingController _ciudadController = TextEditingController();
+
+  File _foto;
+  String urlFoto="";
+  String userID = "";
+  String userEmail = "";
+  String _itemCiudad;
+  dynamic usuario;
+  String nombre_user = "";
+  String ciudad_user = "";
+  String descripcion_user = "";
+  String imagen_perfil_user = "";
+
+  String ciudad_usuario="";
   List<DropdownMenuItem<String>> _ciudadItems;
+  //DocumentSnapshot usuario_actual;
   @override
   void initState() {
     super.initState();
-    setState(() {
+     
+      User getUser = FirebaseAuth.instance.currentUser;
+      userID = getUser.uid; // ID DE LA PERSONA AUTENTIFICADA
+      userEmail = getUser.email;
+      fetchUserInfo() ;
+      //ciudad_usuario=usuario.ciudad;
       _ciudadItems = getCiudadItems();
       _itemCiudad = _ciudadItems[0].value;
-    });
+  }
+  fetchUserInfo() async {
+     usuario =  await DatabaseManager().getInfoUsuario(userID);
+    
   }
   getData() async {
     return await FirebaseFirestore.instance.collection('ciudades').get();
@@ -57,7 +78,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
 
     items.add(DropdownMenuItem(
       value: '0',
-      child: Text('- Seleccione -', style: TextStyle(color: Colors.white),) ,
+      child: Text('- Seleccione -', style: TextStyle(color: Colors.black),) ,
     ));
 
     return items;
@@ -73,64 +94,48 @@ class _EditarPerfil extends State<Editar_Perfil>{
             child: Column(
               
               mainAxisAlignment: MainAxisAlignment.center,
+              
               children: [
+                
+                SizedBox(
+                  height: 50,
+                ),
                 Text(
-                  'Registro',
+                  'Editar datos ${usuario.nombre}',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 30,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                SizedBox(
+                  height: 50,
+                ),
+                Container(
+                  
+                    alignment: Alignment(0.0, 2.5),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage("${usuario.imagen_perfil}"),
+                    radius: 120.0,
+                    child: GestureDetector(
+                        //onTap: getImagen, 
+                      )
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(32.0),
+                  
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _nombreController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Nombre no puede estar vacio';
-                          } else
-                            return null;
-                        },
+                        initialValue: usuario.nombre,
+                        
                         decoration: InputDecoration(
                             labelText: 'Nombre',
                             labelStyle: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                             )),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _emailContoller,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Correo no puede estar vacio';
-                          } else
-                            return null;
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Correo',
-                            labelStyle: TextStyle(color: Colors.white)),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Contraseña no puede estar vacia';
-                          } else
-                            return null;
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Contraseña',
-                            labelStyle: TextStyle(color: Colors.white)),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(color: Colors.black),
                       ),
                       SizedBox(height: 30),
                       DropdownButtonFormField(
@@ -138,8 +143,9 @@ class _EditarPerfil extends State<Editar_Perfil>{
                         validator: (value) =>
                         value == '0' ? 'Debe seleccionar una ciudad' : null,
                         decoration: InputDecoration(
-                            labelText: 'Ciudad', icon: Icon(FontAwesomeIcons.city,color: Colors.white),
-                            labelStyle: TextStyle(color: Colors.white)),
+                          
+                            labelText: 'Ciudad', icon: Icon(FontAwesomeIcons.city,color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.black)),
                             
                         value: _itemCiudad,
                         items: _ciudadItems,
@@ -152,19 +158,19 @@ class _EditarPerfil extends State<Editar_Perfil>{
                         onSaved: (value) => _itemCiudad = value,
                       ),
                       TextFormField(
-                        controller: _edadController,
+                        controller: _PaisController,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Edad';
+                            return 'Pais';
                           } else
                             return null;
                         },
                         decoration: InputDecoration(
-                            labelText: 'Edad',
+                            labelText: 'Pais',
                             labelStyle: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                             )),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       SizedBox(height: 180),
                       Row(
