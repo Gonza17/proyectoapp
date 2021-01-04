@@ -36,49 +36,6 @@ class _PerfilState extends State<Perfil> {
     fetchUserInfo();
     //getUsuarioItems();
   }
-
-  Future CaptureImagen(SelectSource opcion) async {
-    File image;
-
-    opcion == SelectSource.camara
-        ? image = await ImagePicker.pickImage(source: ImageSource.camera)
-        : image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _foto = image;
-    });
-  }
-
-  Future getImagen() async {
-    AlertDialog alerta = new AlertDialog(
-      content: Text('Seleccione donde desea capturar la imagen'),
-      title: Text('seleccione imagen'),
-      actions: <Widget>[
-        FlatButton(
-          onPressed: () {
-            CaptureImagen(SelectSource.camara);
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-          child: Row(
-            children: <Widget>[Text('Camara'), Icon(Icons.camera)],
-          ),
-        ),
-        FlatButton(
-          onPressed: () {
-            CaptureImagen(SelectSource.galeria);
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-          child: Row(
-            children: <Widget>[Text('Galeria'), Icon(Icons.image)],
-          ),
-        )
-      ],
-    );
-    cambiar_imagen();
-    showDialog(context: context, child: alerta);
-    
-  }
-
   fetchUserInfo() async {
     User getUser = FirebaseAuth.instance.currentUser;
     userID = getUser.uid; // ID DE LA PERSONA AUTENTIFICADA
@@ -118,32 +75,7 @@ class _PerfilState extends State<Perfil> {
   }
   */
 
-  cambiar_imagen() async {
 
-    if (_foto != null) {
-        final _storage = FirebaseStorage.instance;
-        var numero_random = new Random().nextInt(100000);
-        var fireStoreRef = await _storage
-            .ref()
-            .child('usuario')
-            .child(userID)
-            .child('perfil')
-            .child('$numero_random.jpg')
-            .putFile(_foto);
-
-        var downloadUrl = await fireStoreRef.ref.getDownloadURL();
-        urlFoto = downloadUrl;
-        print(urlFoto);
-        updateImagen();
-      }
-  }
-
-  Future updateImagen() async {
-  CollectionReference perfil_usuario = FirebaseFirestore.instance.collection('info_usuario');
-      return await perfil_usuario.doc(userID).update({
-        'imagen_perfil': urlFoto,
-       });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,9 +97,6 @@ class _PerfilState extends State<Perfil> {
                 child: CircleAvatar(
                   backgroundImage: NetworkImage("$imagen_perfil_user"),
                   radius: 60.0,
-                  child: GestureDetector(
-                      onTap: getImagen, 
-                    )
                 ),
               ),
             ),
