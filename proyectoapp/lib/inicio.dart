@@ -11,7 +11,7 @@ class Inicio extends StatefulWidget {
 class _InicioState extends State<Inicio> {
   String userID = "";
   String userEmail = "";
-
+  dynamic receta;
   @override
   void initState() {
     super.initState();
@@ -23,7 +23,39 @@ class _InicioState extends State<Inicio> {
     userID = getUser.uid;
     userEmail = getUser.email;
   }
+  createAlertDialog(String id_receta) async{
+    DocumentSnapshot receta_actual = await FirebaseFirestore.instance
+        .collection('recetas')
+        .doc(id_receta)
+        .get(); //informacion de la persona autentificada
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text(receta_actual['nombre']),
+        content: 
+        SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Text('Ingredientes: ${receta_actual['ingredientes']}'
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+               Text(
+                  receta_actual['receta']
+                )
+            ],
+          )
+        ),
 
+        
+         
+      );
+      //Title: receta_actual['nombre'];
+      
+      
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,6 +89,8 @@ class _InicioState extends State<Inicio> {
                                   ingredientes:
                                       document['ingredientes'].toString(),
                                 );
+                                print(document.id);
+                                createAlertDialog(document.id);
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(
