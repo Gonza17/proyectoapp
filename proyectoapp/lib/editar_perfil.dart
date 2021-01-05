@@ -30,9 +30,11 @@ class _EditarPerfil extends State<Editar_Perfil>{
   String userID = "";
   String userEmail = "";
   String _itemCiudad;
+  String _itemPais;
   dynamic usuario;
 
   List<DropdownMenuItem<String>> _ciudadItems;
+  List<DropdownMenuItem<String>> _paisItems;
   //DocumentSnapshot usuario_actual;
   @override
   void initState() {
@@ -115,10 +117,14 @@ class _EditarPerfil extends State<Editar_Perfil>{
   if(_itemCiudad=='0'){
     _itemCiudad=usuario.ciudad;
   }
+  if(_itemPais=='0'){
+    _itemCiudad=usuario.pais;
+  }
    if (_foto != null) {
      return await perfil_usuario.doc(userID).update({
        'nombre' :_nombreController.text,
        'ciudad' : _itemCiudad,
+       'pais' : _itemPais,
        'descripcion':_descripcionController.text,
        'imagen_perfil': urlFoto,
        
@@ -127,6 +133,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
       return await perfil_usuario.doc(userID).update({
         'nombre' :_nombreController.text,
         'ciudad' : _itemCiudad,
+        'pais' : _itemPais,
         'descripcion':_descripcionController.text,
         'imagen_perfil': usuario.imagen_perfil,
       });
@@ -139,6 +146,8 @@ class _EditarPerfil extends State<Editar_Perfil>{
       _descripcionController.text=usuario.descripcion;
      _ciudadItems = getCiudadItems();
       _itemCiudad = _ciudadItems[0].value;
+      _paisItems = getPaisItems();
+      _itemPais = _paisItems[0].value;
     
   }
   getData() async {
@@ -169,6 +178,34 @@ class _EditarPerfil extends State<Editar_Perfil>{
 
     return items;
   }
+
+  getDataPais() async {
+    return await FirebaseFirestore.instance.collection('paises').get();
+  }
+  List<DropdownMenuItem<String>> getPaisItems() {
+    List<DropdownMenuItem<String>> items = List();
+    QuerySnapshot dataPaises;
+    getDataPais().then((data) {
+      
+      dataPaises = data;
+      dataPaises.docs.forEach((obj) {
+        print('${obj.id} ${obj['nombre']}');
+        items.add(DropdownMenuItem(
+          value: obj.id,
+          
+          child: Text(obj['nombre'],style: TextStyle(color: Colors.black)),
+        ));
+      });
+    }).catchError((error) => print('hay un error.....' + error));
+
+    items.add(DropdownMenuItem(
+      value: '0',
+      child: Text('${usuario.pais}', style: TextStyle(color: Colors.black),) ,
+    ));
+
+    return items;
+  }
+
    Widget build(BuildContext context) {
     return Scaffold(
       body:SingleChildScrollView(
@@ -266,20 +303,23 @@ class _EditarPerfil extends State<Editar_Perfil>{
                         
                         onSaved: (value) => _itemCiudad = value,
                       ),
-                      TextFormField(
-                        controller: _PaisController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Pais';
-                          } else
-                            return null;
-                        },
+                      DropdownButtonFormField(
+                        
+                        validator: (value) =>
+                        value == '0' ? 'Debe seleccionar un pais' : null,
                         decoration: InputDecoration(
-                            labelText: 'Pais',
-                            labelStyle: TextStyle(
-                              color: Colors.black,
-                            )),
-                        style: TextStyle(color: Colors.black),
+                            labelText: 'Pais', icon: Icon(FontAwesomeIcons.globeAmericas,color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.black)),
+                            
+                        value: _itemPais,
+                        items: _paisItems,
+                        onChanged: (value) {
+                          setState(() {
+                            _itemPais = value;
+                          });
+                        }, //seleccionarCiudadItem,
+                        
+                        onSaved: (value) => _itemPais = value,
                       ),
                       SizedBox(height: 50),
                       Row(

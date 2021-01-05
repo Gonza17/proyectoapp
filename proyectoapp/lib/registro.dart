@@ -14,20 +14,21 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _key = GlobalKey<FormState>();
   final AuthenticationService _auth = AuthenticationService();
-   String _itemCiudad;
-
+  String _itemCiudad;
+  String _itemPais;
   TextEditingController _nombreController = TextEditingController();
   TextEditingController _emailContoller = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _edadController = TextEditingController();
-  TextEditingController _ciudadController = TextEditingController();
   List<DropdownMenuItem<String>> _ciudadItems;
+  List<DropdownMenuItem<String>> _paisItems;
   @override
   void initState() {
     super.initState();
     setState(() {
       _ciudadItems = getCiudadItems();
       _itemCiudad = _ciudadItems[0].value;
+      _paisItems = getPaisItems();
+      _itemPais = _paisItems[0].value;
     });
   }
   getData() async {
@@ -58,6 +59,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return items;
   }
+
+  getDataPais() async {
+    return await FirebaseFirestore.instance.collection('paises').get();
+  }
+  List<DropdownMenuItem<String>> getPaisItems() {
+    List<DropdownMenuItem<String>> items = List();
+    QuerySnapshot dataPaises;
+    getDataPais().then((data) {
+      
+      dataPaises = data;
+      dataPaises.docs.forEach((obj) {
+        print('${obj.id} ${obj['nombre']}');
+        items.add(DropdownMenuItem(
+          value: obj.id,
+          
+          child: Text(obj['nombre'],style: TextStyle(color: Colors.black)),
+        ));
+      });
+    }).catchError((error) => print('hay un error.....' + error));
+
+    items.add(DropdownMenuItem(
+      value: '0',
+      child: Text('- Seleccione -', style: TextStyle(color: Colors.white),) ,
+    ));
+
+    return items;
+  }
+
   Widget build(BuildContext context) {
     Query query = FirebaseFirestore.instance.collection("Usuarios");
     return Scaffold(
@@ -159,20 +188,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         
                         onSaved: (value) => _itemCiudad = value,
                       ),
-                      TextFormField(
-                        controller: _edadController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Edad';
-                          } else
-                            return null;
-                        },
+                       DropdownButtonFormField(
+                        
+                        validator: (value) =>
+                        value == '0' ? 'Debe seleccionar un pais' : null,
                         decoration: InputDecoration(
-                            labelText: 'Edad',
-                            labelStyle: TextStyle(
-                              color: Colors.white,
-                            )),
-                        style: TextStyle(color: Colors.white),
+                            labelText: 'Pais', icon: Icon(FontAwesomeIcons.globeAmericas,color: Colors.white),
+                            labelStyle: TextStyle(color: Colors.white)),
+                            
+                        value: _itemPais,
+                        items: _paisItems,
+                        onChanged: (value) {
+                          setState(() {
+                            _itemPais = value;
+                          });
+                        }, //seleccionarCiudadItem,
+                        
+                        onSaved: (value) => _itemPais = value,
                       ),
                       SizedBox(height: 180),
                       Row(
@@ -209,7 +241,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
   void registrar() async{
-    dynamic result = await _auth.createNewUser(_nombreController.text,_emailContoller.text,_passwordController.text,_itemCiudad);
+    dynamic result = await _auth.createNewUser(_nombreController.text,_emailContoller.text,_passwordController.text,_itemCiudad,_itemPais);
     if(result==null){
       print('email no es valido');
     }else{
@@ -217,7 +249,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       _nombreController.clear();
       _emailContoller.clear();
       _passwordController.clear();
-      _edadController.clear();
       Navigator.pop(context);
     }
   }

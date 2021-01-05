@@ -25,6 +25,7 @@ class _PerfilState extends State<Perfil> {
 
   String nombre_user = "";
   String ciudad_user = "";
+  String pais_user = "";
   String descripcion_user = "";
   String imagen_perfil_user = "";
   List<DropdownMenuItem<String>> _ciudadItems;
@@ -46,6 +47,7 @@ class _PerfilState extends State<Perfil> {
         .get(); //informacion de la persona autentificada
     nombre_user = usuario_actual['nombre'];
     ciudad_user = usuario_actual['ciudad'];
+    pais_user = usuario_actual['pais'];
     imagen_perfil_user = usuario_actual['imagen_perfil'];
     descripcion_user = usuario_actual['descripcion'];
   }
@@ -116,7 +118,7 @@ class _PerfilState extends State<Perfil> {
             height: 10,
           ),
           Text(
-            ciudad_user,
+            "$ciudad_user,$pais_user",
             style: TextStyle(
                 fontSize: 18.0,
                 color: Colors.black45,
