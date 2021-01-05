@@ -50,10 +50,10 @@ class _InicioState extends State<Inicio> {
                             borderRadius: BorderRadius.circular(10.0),
                             child: InkWell(
                               onTap: () {
-                                Recetas receta = Recetas(
+                                Receta receta = Receta(
                                   nombre: document['nombre'].toString(),
                                   image: document['image'].toString(),
-                                  recetas: document['recetas'].toString(),
+                                  recetas: document['receta'].toString(),
                                   ingredientes:
                                       document['ingredientes'].toString(),
                                 );

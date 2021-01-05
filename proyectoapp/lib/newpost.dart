@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Commonthings {
   static Size size;
@@ -26,11 +27,19 @@ class _NewpostState extends State<Newpost> {
   String recetas;
   String userID = "";
   String userEmail = "";
+  List<DropdownMenuItem<String>> _categoria_Items;
+  String _itemCategoria;
 
   @override
   void initState() {
     super.initState();
     fetchUserInfo();
+    _categoria_Items = getCategoria();
+    _itemCategoria = _categoria_Items[0].value;
+  }
+
+  getData() async {
+    return await FirebaseFirestore.instance.collection('categorias').get();
   }
 
   fetchUserInfo() async {
@@ -63,6 +72,31 @@ class _NewpostState extends State<Newpost> {
     setState(() {
       _foto = image;
     });
+  }
+
+  List<DropdownMenuItem<String>> getCategoria() {
+    List<DropdownMenuItem<String>> items = List();
+    QuerySnapshot dataCategorias;
+    getData().then((data) {
+      dataCategorias = data;
+      dataCategorias.docs.forEach((obj) {
+        print('${obj.id} ${obj['nombre']}');
+        items.add(DropdownMenuItem(
+          value: obj.id,
+          child: Text(obj['nombre'], style: TextStyle(color: Colors.black)),
+        ));
+      });
+    }).catchError((error) => print('hay un error.....' + error));
+
+    items.add(DropdownMenuItem(
+      value: '0',
+      child: Text(
+        '- Seleccione -',
+        style: TextStyle(color: Colors.black),
+      ),
+    ));
+
+    return items;
   }
 
   Future getImage() async {
@@ -136,7 +170,8 @@ class _NewpostState extends State<Newpost> {
             'nombre': nombre,
             'image': urlFoto,
             'ingredientes': ingredientes,
-            'receta': receta
+            'receta': receta,
+            'categorias': _categoria_Items
           });
           /* .then((value) => Navigator.of(context).pop())
               .catchError((onError) =>
@@ -149,7 +184,8 @@ class _NewpostState extends State<Newpost> {
           'nombre': nombre,
           'image': urlFoto,
           'ingredientes': ingredientes,
-          'receta': receta
+          'receta': receta,
+          'categoria': _categoria_Items
         });
         /*.then((value) => Navigator.pushNamed(context, '/home')
             .catchError(
@@ -213,6 +249,24 @@ class _NewpostState extends State<Newpost> {
                   }
                 },
                 onSaved: (value) => nombre = value.trim(),
+              ),
+              DropdownButtonFormField(
+                validator: (value) =>
+                    value == '0' ? 'Debe seleccionar una categoria' : null,
+                decoration: InputDecoration(
+                    labelText: 'Categoria',
+                    icon: Icon(FontAwesomeIcons.filter, color: Colors.black),
+                    labelStyle: TextStyle(color: Colors.black)),
+
+                value: _itemCategoria,
+                items: _categoria_Items,
+                onChanged: (value) {
+                  setState(() {
+                    _categoria_Items = value;
+                  });
+                }, //seleccionarCiudadItem,
+
+                onSaved: (value) => _categoria_Items = value,
               ),
               TextFormField(
                 decoration: InputDecoration(
