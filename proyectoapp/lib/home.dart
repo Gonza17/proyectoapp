@@ -3,7 +3,6 @@ import 'package:proyectoapp/DatabaseManager/DatabaseManager.dart';
 import 'package:proyectoapp/Services/AuthenticationService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyectoapp/inicio.dart';
-import 'package:proyectoapp/busqueda.dart';
 import 'package:proyectoapp/newpost.dart';
 import 'package:proyectoapp/perfil.dart';
 
@@ -55,7 +54,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             bottom: new TabBar(
               tabs: <Widget>[
                 new Tab(icon: new Icon(Icons.home)),
-                new Tab(icon: new Icon(Icons.search)),
                 new Tab(icon: new Icon(Icons.post_add)),
                 new Tab(icon: new Icon(Icons.contacts)),
               ],
@@ -64,7 +62,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         body: new TabBarView(
           children: <Widget>[
             new Inicio(),
-            new Busqueda(),
             new Newpost(),
             new Perfil(),
           ],
