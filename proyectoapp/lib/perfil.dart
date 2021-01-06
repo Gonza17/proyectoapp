@@ -17,26 +17,23 @@ class Perfil extends StatefulWidget {
 enum SelectSource { camara, galeria }
 
 class _PerfilState extends State<Perfil> {
-  File _foto;
-  String urlFoto="";
+  /* Inicializar datos*/
   String userID = "";
   String userEmail = "";
-  String _itemCiudad;
-
   String nombre_user = "";
   String ciudad_user = "";
   String pais_user = "";
   String descripcion_user = "";
   String imagen_perfil_user = "";
   List<DropdownMenuItem<String>> _ciudadItems;
-  //final AuthenticationService _auth = AuthenticationService();
 
   @override
   void initState() {
     super.initState();
     fetchUserInfo();
-    //getUsuarioItems();
   }
+
+//informacion de la persona autentificada
   fetchUserInfo() async {
     User getUser = FirebaseAuth.instance.currentUser;
     userID = getUser.uid; // ID DE LA PERSONA AUTENTIFICADA
@@ -44,39 +41,13 @@ class _PerfilState extends State<Perfil> {
     DocumentSnapshot usuario_actual = await FirebaseFirestore.instance
         .collection('info_usuario')
         .doc(userID)
-        .get(); //informacion de la persona autentificada
+        .get(); 
     nombre_user = usuario_actual['nombre'];
     ciudad_user = usuario_actual['ciudad'];
     pais_user = usuario_actual['pais'];
     imagen_perfil_user = usuario_actual['imagen_perfil'];
     descripcion_user = usuario_actual['descripcion'];
   }
-
-/*
-  getData() async {
-    return await FirebaseFirestore.instance.collection('info_usuario').get();
-  }
-
-  //Dropdownlist from firestore
-   List<DropdownMenuItem<String>> getUsuarioItems() {
-    QuerySnapshot dataUsuario;
-    getData().then((data) {
-      
-      dataUsuario = data;
-      //print(dataCiudades.docs[0]['nombre']);
-      dataUsuario.docs.forEach((obj) {
-        if((obj.id)==userID){
-          
-          nombre_user = obj['nombre'];
-          ciudad_user = obj['ciudad'];
-          descripcion_user = obj['descripcion'];
-          //print('Usuario encontrado!!! $nombre_user $ciudad_user'); 
-        }
-      });
-    }).catchError((error) => print('hay un error.....' + error));
-  }
-  */
-
 
 
   @override
@@ -152,139 +123,7 @@ class _PerfilState extends State<Perfil> {
           SizedBox(
             height: 15,
           ),
-          Text(
-            "Texto || Texto",
-            style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.black45,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.w300),
-          ),
-          Card(
-            margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Recetas",
-                          style: TextStyle(
-                              color: Colors.blueAccent,
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 7,
-                        ),
-                        Text(
-                          "15",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w300),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Seguidores",
-                          style: TextStyle(
-                              color: Colors.blueAccent,
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 7,
-                        ),
-                        Text(
-                          "2000",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w300),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              RaisedButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(80.0),
-                ),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Colors.pink, Colors.redAccent]),
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 100.0,
-                      maxHeight: 40.0,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Contact me",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                          letterSpacing: 2.0,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                ),
-              ),
-              RaisedButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(80.0),
-                ),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Colors.pink, Colors.redAccent]),
-                    borderRadius: BorderRadius.circular(80.0),
-                  ),
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 100.0,
-                      maxHeight: 40.0,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Portfolio",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                          letterSpacing: 2.0,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )
+          
         ],
       ),
     ));

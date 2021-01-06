@@ -31,7 +31,7 @@ class _NewpostState extends State<Newpost> {
   String userID = "";
   String userEmail = "";
 
-/* funcion que sirve para iniciar algunas funciones y poder utilizarlas como la que captura info del usuario y las categorias */
+/* funcion que sirve para iniciar algunas funciones y poder utilizarlas como la que captura info del usuario */
   @override
   void initState() {
     super.initState();
@@ -40,7 +40,7 @@ class _NewpostState extends State<Newpost> {
     //  _itemCategoria = _categoria_Items[0].value;
   }
 
-/* toma los datos del usuario para verificar si esta conectado */
+/* toma los datos del usuario conectado */
   fetchUserInfo() async {
     User getUser = FirebaseAuth.instance.currentUser;
     userID = getUser.uid;

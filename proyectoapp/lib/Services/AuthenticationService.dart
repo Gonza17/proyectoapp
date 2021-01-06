@@ -5,13 +5,13 @@ class AuthenticationService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
-//registro con correo y contraseña
-
+/* Creacion de un usuario nuevo */
 Future createNewUser(String nombre,String email, String password,String ciudad,String pais) async {
   try{
     UserCredential result =  await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
     User user = result.user;
+    /* Envio de datos de usuario */
     await DatabaseManager().createUserData(nombre,user.uid,ciudad,pais,'','https://s1.eestatic.com/2015/03/31/cocinillas/Cocinillas_22257914_116018278_1024x576.jpg');
     return user;
   }catch(e){
@@ -19,7 +19,7 @@ Future createNewUser(String nombre,String email, String password,String ciudad,S
   }
 }
 
-//login 
+/* login */
 Future loginUser(String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
@@ -30,7 +30,7 @@ Future loginUser(String email, String password) async {
     }
   }
 
-//desloguearse
+/* desloguearse */
  Future cerrarSesion() async {
     try {
       return _auth.signOut();
@@ -39,6 +39,8 @@ Future loginUser(String email, String password) async {
       return null;
     }
   } 
+
+  /* Obtener id del usuario conectado */
   Future <String> getCurrentUID() async{
     return ( _auth.currentUser).uid;
   } 

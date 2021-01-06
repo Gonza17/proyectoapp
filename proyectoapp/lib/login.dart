@@ -8,6 +8,7 @@ import 'package:proyectoapp/Services/AuthenticationService.dart';
 class MiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    /* RUTAS */
     return MaterialApp(home: Login(), initialRoute: '/', routes: {
       //'/': (context) => Login(),
       '/home': (context) => Home(),
@@ -21,11 +22,14 @@ class MiApp extends StatelessWidget {
 class Login extends StatelessWidget {
   final _key = GlobalKey<FormState>();
   final AuthenticationService _auth = AuthenticationService();
+  /* Controladores */
   TextEditingController _correoController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
+    /* Envia correo y contraseña para conectarse */
     void iniciarSesion() async {
       dynamic authResult = await _auth.loginUser(
           _correoController.text, _passwordController.text);
@@ -102,13 +106,7 @@ class Login extends StatelessWidget {
                                       hintStyle:
                                           TextStyle(color: Colors.grey[400])),
                                 )),
-                            /*Container(  
-                          child: new RaisedButton(
-                            child: new Text("ingresar",style: new TextStyle(color: Colors.white),),
-                            color: Colors.deepPurple,
-                            onPressed:ingresar,
-                          )
-                        ),*/
+
                             Container(
                                 padding: EdgeInsets.all(8.0),
                                 child: TextFormField(
@@ -133,15 +131,6 @@ class Login extends StatelessWidget {
                     ),
                     Container(
                         height: 50,
-                        /*decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: LinearGradient(
-                        colors:[
-                          Color.fromRGBO(255, 114, 21, 1),
-                          Color.fromRGBO(255, 114, 21, 1)
-                        ]
-                      )
-                    ),*/
                         child: Center(
                           child: RaisedButton(
                             child: Text("Ingresar",
@@ -151,7 +140,6 @@ class Login extends StatelessWidget {
                             onPressed: () {
                               if (_key.currentState.validate()) {
                                 iniciarSesion();
-                                //Navigator.pushNamed(context, '/home');
                               }
                             },
                             shape: RoundedRectangleBorder(
@@ -162,26 +150,7 @@ class Login extends StatelessWidget {
                             color: Color.fromRGBO(255, 114, 21, 1),
                           ),
                         )),
-                    /*Container(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: query.snapshots(),
-                      builder: (context, stream){
-                        if(stream.connectionState == ConnectionState.waiting){
-                          return Center(child: CircularProgressIndicator());
-                        }
 
-                        if(stream.hasError){
-                          return Center(child: Text(stream.error.toString()));
-                        }
-                        QuerySnapshot querySnapshot = stream.data;
-                        return ListView(
-                          children: <Widget>[
-                            for(var Docs in querySnapshot.docs) ListTile(title: new Text(Docs.data()['correo']),)
-                          ]
-                        );
-                      },
-                    )
-                  ),*/
                     SizedBox(
                       height: 50,
                     ),

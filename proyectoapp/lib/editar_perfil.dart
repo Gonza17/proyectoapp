@@ -18,13 +18,11 @@ enum SelectSource { camara, galeria }
 
 class _EditarPerfil extends State<Editar_Perfil>{
   final _key = GlobalKey<FormState>();
-  final AuthenticationService _auth = AuthenticationService();
+  /* Controladores */
   TextEditingController _nombreController = TextEditingController();
   TextEditingController _descripcionController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _PaisController = TextEditingController();
-  TextEditingController _ciudadController = TextEditingController();
 
+   /* Inicializar datos*/
   File _foto;
   String urlFoto="";
   String userID = "";
@@ -33,9 +31,10 @@ class _EditarPerfil extends State<Editar_Perfil>{
   String _itemPais;
   dynamic usuario;
 
+  /* Inicializar items de los dropdownmenus */
   List<DropdownMenuItem<String>> _ciudadItems;
   List<DropdownMenuItem<String>> _paisItems;
-  //DocumentSnapshot usuario_actual;
+
   @override
   void initState() {
     super.initState();
@@ -44,10 +43,10 @@ class _EditarPerfil extends State<Editar_Perfil>{
       userID = getUser.uid; // ID DE LA PERSONA AUTENTIFICADA
       userEmail = getUser.email;
       fetchUserInfo() ;
-      //ciudad_usuario=usuario.ciudad;
+
       
   }
-  
+  /* inicio de la funcion de captura de imagen */
   Future CaptureImagen(SelectSource opcion) async {
     File image;
 
@@ -60,6 +59,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
     });
   }
 
+/* se hace la  funcion con la alerta de dialogo donde te hace seleccionar que se ocupara para cambiar la imagen de perfil */
   Future getImagen() async {
     AlertDialog alerta = new AlertDialog(
       content: Text('Seleccione donde desea capturar la imagen'),
@@ -88,11 +88,12 @@ class _EditarPerfil extends State<Editar_Perfil>{
     showDialog(context: context, child: alerta);
     
   }
+  /* en esta funcion se procede a subir la imagen de perfil nueva a la base de datos  */
   cambiar_imagen() async {
 
     if (_foto != null) {
         final _storage = FirebaseStorage.instance;
-        var numero_random = new Random().nextInt(100000);
+        var numero_random = new Random().nextInt(100000);//se crea un numero aleatorio para el nombre de la imagen
         var fireStoreRef = await _storage
             .ref()
             .child('usuario')
@@ -111,7 +112,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
         updateDatos();
       }
   }
-
+  /* Esta funcion actualiza los datos del perfil del usuario en la base de datos*/
   Future updateDatos() async {
   CollectionReference perfil_usuario = FirebaseFirestore.instance.collection('info_usuario');
   if(_itemCiudad=='0'){
@@ -140,6 +141,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
    }
       
   }
+  /* informacion de la persona autentificada */
   fetchUserInfo() async {
      usuario =  await DatabaseManager().getInfoUsuario(userID);
       _nombreController.text=usuario.nombre;
@@ -150,11 +152,12 @@ class _EditarPerfil extends State<Editar_Perfil>{
       _itemPais = _paisItems[0].value;
     
   }
+  /* Se obtienen los datos de las ciudades  */
   getData() async {
     return await FirebaseFirestore.instance.collection('ciudades').get();
   }
 
-  //Dropdownlist from firestore
+  /* Se agrega cada ciudad a un dropdownmenu */
    List<DropdownMenuItem<String>> getCiudadItems() {
     List<DropdownMenuItem<String>> items = List();
     QuerySnapshot dataCiudades;
@@ -179,9 +182,12 @@ class _EditarPerfil extends State<Editar_Perfil>{
     return items;
   }
 
+  /* Se obtienen los datos de los paises  */
   getDataPais() async {
     return await FirebaseFirestore.instance.collection('paises').get();
   }
+
+   /* Se agrega cada pais a un dropdownmenu */
   List<DropdownMenuItem<String>> getPaisItems() {
     List<DropdownMenuItem<String>> items = List();
     QuerySnapshot dataPaises;
@@ -201,8 +207,8 @@ class _EditarPerfil extends State<Editar_Perfil>{
     items.add(DropdownMenuItem(
       value: '0',
       child: Text('${usuario.pais}', style: TextStyle(color: Colors.black),) ,
+      
     ));
-
     return items;
   }
 
@@ -241,7 +247,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
                     backgroundImage: NetworkImage("${usuario.imagen_perfil}"),
                     radius: 120.0,
                     child: GestureDetector(
-                        //onTap: getImagen, 
+                        onTap: getImagen, 
                       )
                   ),
                 ),
@@ -299,7 +305,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
                               _itemCiudad = value;
                             
                           });
-                        }, //seleccionarCiudadItem,
+                        },
                         
                         onSaved: (value) => _itemCiudad = value,
                       ),
@@ -317,7 +323,7 @@ class _EditarPerfil extends State<Editar_Perfil>{
                           setState(() {
                             _itemPais = value;
                           });
-                        }, //seleccionarCiudadItem,
+                        }, 
                         
                         onSaved: (value) => _itemPais = value,
                       ),

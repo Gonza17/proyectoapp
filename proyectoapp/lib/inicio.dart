@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:proyectoapp/DatabaseManager/DatabaseManager.dart';
 import 'package:proyectoapp/model/recetas.dart';
 
 /* inicio del statefulwidget */
@@ -33,7 +34,8 @@ class _InicioState extends State<Inicio> {
     DocumentSnapshot receta_actual = await FirebaseFirestore.instance
         .collection('recetas')
         .doc(id_receta)
-        .get(); //informacion de la persona autentificada
+        .get(); //informacion de la receta
+    dynamic usuario_receta = await DatabaseManager().getInfoUsuario(receta_actual['uid']);//datos del creador de la receta
     return showDialog(
         context: context,
         builder: (context) {
@@ -46,11 +48,23 @@ class _InicioState extends State<Inicio> {
                 SizedBox(
                   height: 15,
                 ),
-                Text(receta_actual['receta'])
+                Text('Preparacion:'),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(receta_actual['receta']),
+                SizedBox(
+                  height: 15,
+                ),
+                Text('Receta creada por:'),
+                CircleAvatar(
+                    backgroundImage: NetworkImage("${usuario_receta.imagen_perfil}"),
+                    radius: 30.0,
+                  ),
+                Text('${usuario_receta.nombre}',style: TextStyle(fontWeight: FontWeight.bold))
               ],
             )),
           );
-          //Title: receta_actual['nombre'];
         });
   }
 
@@ -75,7 +89,7 @@ class _InicioState extends State<Inicio> {
                       children: <Widget>[
                         new Container(
                           padding:
-                              EdgeInsets.only(top: 2.0, left: 2.0, right: 2.0),
+                              EdgeInsets.only(top: 2.0, left: 0.0, right: 0.0),
                           child: ClipRRect(
                             //recondea borde Foto dentro del Stack
                             borderRadius: BorderRadius.circular(10.0),

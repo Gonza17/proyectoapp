@@ -14,11 +14,14 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _key = GlobalKey<FormState>();
   final AuthenticationService _auth = AuthenticationService();
+  /* Inicializar datos*/
   String _itemCiudad;
   String _itemPais;
+  /* Controladores */
   TextEditingController _nombreController = TextEditingController();
   TextEditingController _emailContoller = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+   /* Inicializar items de los dropdownmenus */
   List<DropdownMenuItem<String>> _ciudadItems;
   List<DropdownMenuItem<String>> _paisItems;
   @override
@@ -31,11 +34,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       _itemPais = _paisItems[0].value;
     });
   }
+  /* Se obtienen los datos de las ciudades  */
   getData() async {
     return await FirebaseFirestore.instance.collection('ciudades').get();
   }
 
-  //Dropdownlist from firestore
+  /* Se agrega cada ciudad a un dropdownmenu */
    List<DropdownMenuItem<String>> getCiudadItems() {
     List<DropdownMenuItem<String>> items = List();
     QuerySnapshot dataCiudades;
@@ -59,10 +63,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return items;
   }
-
+  /* Se obtienen los datos de los paises  */
   getDataPais() async {
     return await FirebaseFirestore.instance.collection('paises').get();
   }
+  /* Se agrega cada pais a un dropdownmenu */
   List<DropdownMenuItem<String>> getPaisItems() {
     List<DropdownMenuItem<String>> items = List();
     QuerySnapshot dataPaises;
@@ -240,6 +245,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
+
+  /* Se envian los datos para el registro del usuario */ 
   void registrar() async{
     dynamic result = await _auth.createNewUser(_nombreController.text,_emailContoller.text,_passwordController.text,_itemCiudad,_itemPais);
     if(result==null){
