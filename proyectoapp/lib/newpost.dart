@@ -7,10 +7,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/*funcion size para los margenes de la pagina*/
 class Commonthings {
   static Size size;
 }
 
+/*statefull widget para inicializar la funcion*/
 class Newpost extends StatefulWidget {
   final String id;
   const Newpost({this.id});
@@ -18,18 +20,23 @@ class Newpost extends StatefulWidget {
   _NewpostState createState() => _NewpostState();
 }
 
+/* funcion selectSource sirve para poder elegir entre la camara y la galeria  */
 enum SelectSource { camara, galeria }
 
+/*inicio del newpost  */
 class _NewpostState extends State<Newpost> {
+  //los tipos de ddatos que se utilizaran dentro del newpost
   File _foto;
   String urlFoto;
   bool _isInAsyncCall = false;
   String recetas;
   String userID = "";
   String userEmail = "";
-  List<DropdownMenuItem<String>> _categoria_Items;
+  List<DropdownMenuItem<String>>
+      _categoria_Items; //genera una lista de las categorias que existen.
   String _itemCategoria;
 
+/* funcion que sirve para iniciar algunas funciones y poder utilizarlas como la que captura info del usuario y las categorias */
   @override
   void initState() {
     super.initState();
@@ -38,21 +45,24 @@ class _NewpostState extends State<Newpost> {
     _itemCategoria = _categoria_Items[0].value;
   }
 
+/* toma los datos de la coleccion de categorias */
   getData() async {
     return await FirebaseFirestore.instance.collection('categorias').get();
   }
 
+/* toma los datos del usuario para verificar si esta conectado */
   fetchUserInfo() async {
     User getUser = FirebaseAuth.instance.currentUser;
     userID = getUser.uid;
     userEmail = getUser.email;
   }
 
+/* controladores de texto para saber que los textos no estan vacios */
   TextEditingController recetaInputController;
   TextEditingController nombreInputController;
   TextEditingController imageInputController;
   TextEditingController ingredientesInputController;
-
+/* mas tipos de datos y se instancia la db y formkey */
   String id;
   final db = Firestore.instance;
   final _formKey = GlobalKey<FormState>();
@@ -62,6 +72,7 @@ class _NewpostState extends State<Newpost> {
   String usuario;
   String ingredientes;
 
+/* inicio de la funcion de captura de imagen */
   Future CaptureIamgen(SelectSource opcion) async {
     File image;
 
@@ -74,6 +85,7 @@ class _NewpostState extends State<Newpost> {
     });
   }
 
+/* se realiza la captura de datos de las categorias para hacer el dropdown */
   List<DropdownMenuItem<String>> getCategoria() {
     List<DropdownMenuItem<String>> items = List();
     QuerySnapshot dataCategorias;
@@ -99,6 +111,7 @@ class _NewpostState extends State<Newpost> {
     return items;
   }
 
+/* se hace la  funcion con la alerta de dialogo donde te hace seleccionar que se ocupara para agregar la imagen de la receta */
   Future getImage() async {
     AlertDialog alerta = new AlertDialog(
       content: Text('Seleccione donde desea capturar la imagen'),
@@ -127,6 +140,7 @@ class _NewpostState extends State<Newpost> {
     showDialog(context: context, child: alerta);
   }
 
+/* divide los espacios dentro de la pagina  */
   Widget divider() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -137,6 +151,7 @@ class _NewpostState extends State<Newpost> {
     );
   }
 
+/* valida el formulario para poder pasar a la funcion envio */
   bool _validarlo() {
     final form = _formKey.currentState;
 
@@ -147,25 +162,30 @@ class _NewpostState extends State<Newpost> {
     return false;
   }
 
+/* en esta funcion se procede a hacer todo el guardado de la receta en la bace de datos  */
   enviar() async {
     if (_validarlo()) {
       setState(() {
         _isInAsyncCall = true;
       });
       if (_foto != null) {
-        final _storage = FirebaseStorage.instance;
-        var fireStoreRef = await _storage
-            .ref()
-            .child('usuario')
-            .child(userID)
-            .child('recetas')
-            .child('$nombre.jpg')
-            .putFile(_foto);
+        final _storage = FirebaseStorage
+            .instance; //se instancia el espacio que tendra en la base de datos
+        var fireStoreRef =
+            await _storage // esta es la referencia al espacio instanciado anteriormente
+                .ref()
+                .child('usuario')
+                .child(userID) //verifica si es realmente el usuario id
+                .child('recetas') // da nombre a la coleccion de datos
+                .child('$nombre.jpg')
+                .putFile(_foto);
 
-        var downloadUrl = await fireStoreRef.ref.getDownloadURL();
+        var downloadUrl = await fireStoreRef.ref
+            .getDownloadURL(); //captura el url de la imagen tomada
         urlFoto = downloadUrl;
         setState(() {
           Firestore.instance.collection('recetas').add({
+            //aqui agrega los demas datos a la intancia de las recetas.
             'uid': userID,
             'nombre': nombre,
             'image': urlFoto,
@@ -195,6 +215,8 @@ class _NewpostState extends State<Newpost> {
     }
   }
 
+/* aqui se contruye la vista con cada uno de los espacios para el formulario
+demas de hacer todos las validaciones de que no hayan espacios en blanco, etc. */
   @override
   Widget build(BuildContext context) {
     Commonthings.size = MediaQuery.of(context).size;
@@ -264,7 +286,7 @@ class _NewpostState extends State<Newpost> {
                   setState(() {
                     _categoria_Items = value;
                   });
-                }, //seleccionarCiudadItem,
+                }, //selecciona una categoria item.
 
                 onSaved: (value) => _categoria_Items = value,
               ),
