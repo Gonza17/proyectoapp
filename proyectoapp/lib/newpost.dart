@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /*funcion size para los margenes de la pagina*/
 class Commonthings {
@@ -25,29 +24,20 @@ enum SelectSource { camara, galeria }
 
 /*inicio del newpost  */
 class _NewpostState extends State<Newpost> {
-  //los tipos de ddatos que se utilizaran dentro del newpost
   File _foto;
   String urlFoto;
   bool _isInAsyncCall = false;
   String recetas;
   String userID = "";
   String userEmail = "";
-  List<DropdownMenuItem<String>>
-      _categoria_Items; //genera una lista de las categorias que existen.
-  String _itemCategoria;
 
 /* funcion que sirve para iniciar algunas funciones y poder utilizarlas como la que captura info del usuario y las categorias */
   @override
   void initState() {
     super.initState();
     fetchUserInfo();
-    _categoria_Items = getCategoria();
-    _itemCategoria = _categoria_Items[0].value;
-  }
-
-/* toma los datos de la coleccion de categorias */
-  getData() async {
-    return await FirebaseFirestore.instance.collection('categorias').get();
+    //  _categoria_Items = getCategoria();
+    //  _itemCategoria = _categoria_Items[0].value;
   }
 
 /* toma los datos del usuario para verificar si esta conectado */
@@ -83,32 +73,6 @@ class _NewpostState extends State<Newpost> {
     setState(() {
       _foto = image;
     });
-  }
-
-/* se realiza la captura de datos de las categorias para hacer el dropdown */
-  List<DropdownMenuItem<String>> getCategoria() {
-    List<DropdownMenuItem<String>> items = List();
-    QuerySnapshot dataCategorias;
-    getData().then((data) {
-      dataCategorias = data;
-      dataCategorias.docs.forEach((obj) {
-        print('${obj.id} ${obj['nombre']}');
-        items.add(DropdownMenuItem(
-          value: obj.id,
-          child: Text(obj['nombre'], style: TextStyle(color: Colors.black)),
-        ));
-      });
-    }).catchError((error) => print('hay un error.....' + error));
-
-    items.add(DropdownMenuItem(
-      value: '0',
-      child: Text(
-        '- Seleccione -',
-        style: TextStyle(color: Colors.black),
-      ),
-    ));
-
-    return items;
   }
 
 /* se hace la  funcion con la alerta de dialogo donde te hace seleccionar que se ocupara para agregar la imagen de la receta */
@@ -169,29 +133,24 @@ class _NewpostState extends State<Newpost> {
         _isInAsyncCall = true;
       });
       if (_foto != null) {
-        final _storage = FirebaseStorage
-            .instance; //se instancia el espacio que tendra en la base de datos
-        var fireStoreRef =
-            await _storage // esta es la referencia al espacio instanciado anteriormente
-                .ref()
-                .child('usuario')
-                .child(userID) //verifica si es realmente el usuario id
-                .child('recetas') // da nombre a la coleccion de datos
-                .child('$nombre.jpg')
-                .putFile(_foto);
+        final _storage = FirebaseStorage.instance;
+        var fireStoreRef = await _storage
+            .ref()
+            .child('usuario')
+            .child(userID)
+            .child('recetas')
+            .child('$nombre.jpg')
+            .putFile(_foto);
 
-        var downloadUrl = await fireStoreRef.ref
-            .getDownloadURL(); //captura el url de la imagen tomada
+        var downloadUrl = await fireStoreRef.ref.getDownloadURL();
         urlFoto = downloadUrl;
         setState(() {
           Firestore.instance.collection('recetas').add({
-            //aqui agrega los demas datos a la intancia de las recetas.
             'uid': userID,
             'nombre': nombre,
             'image': urlFoto,
             'ingredientes': ingredientes,
             'receta': receta,
-            'categorias': _categoria_Items
           });
           /* .then((value) => Navigator.of(context).pop())
               .catchError((onError) =>
@@ -205,7 +164,6 @@ class _NewpostState extends State<Newpost> {
           'image': urlFoto,
           'ingredientes': ingredientes,
           'receta': receta,
-          'categoria': _categoria_Items
         });
         /*.then((value) => Navigator.pushNamed(context, '/home')
             .catchError(
@@ -271,24 +229,6 @@ demas de hacer todos las validaciones de que no hayan espacios en blanco, etc. *
                   }
                 },
                 onSaved: (value) => nombre = value.trim(),
-              ),
-              DropdownButtonFormField(
-                validator: (value) =>
-                    value == '0' ? 'Debe seleccionar una categoria' : null,
-                decoration: InputDecoration(
-                    labelText: 'Categoria',
-                    icon: Icon(FontAwesomeIcons.filter, color: Colors.black),
-                    labelStyle: TextStyle(color: Colors.black)),
-
-                value: _itemCategoria,
-                items: _categoria_Items,
-                onChanged: (value) {
-                  setState(() {
-                    _categoria_Items = value;
-                  });
-                }, //selecciona una categoria item.
-
-                onSaved: (value) => _categoria_Items = value,
               ),
               TextFormField(
                 decoration: InputDecoration(
