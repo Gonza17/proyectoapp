@@ -3,60 +3,59 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyectoapp/model/recetas.dart';
 
+/* inicio del statefulwidget */
 class Inicio extends StatefulWidget {
   @override
   _InicioState createState() => _InicioState();
 }
 
 class _InicioState extends State<Inicio> {
+  /* datos que se ocuparan para poder trabajar el inicio */
   String userID = "";
   String userEmail = "";
   dynamic receta;
+  /* funcion para inicializar la funcion de captar los datos del usuario */
   @override
   void initState() {
     super.initState();
     fetchUserInfo();
   }
 
+/* esta es la funcion que extrae la informacion del usuario */
   fetchUserInfo() async {
     User getUser = FirebaseAuth.instance.currentUser;
     userID = getUser.uid;
     userEmail = getUser.email;
   }
-  createAlertDialog(String id_receta) async{
+
+  /* funcion que retorna ventana emergente con los datos de la receta de la imagen */
+  createAlertDialog(String id_receta) async {
     DocumentSnapshot receta_actual = await FirebaseFirestore.instance
         .collection('recetas')
         .doc(id_receta)
         .get(); //informacion de la persona autentificada
-    return showDialog(context: context, builder: (context){
-      return AlertDialog(
-        title: Text(receta_actual['nombre']),
-        content: 
-        SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Text('Ingredientes: ${receta_actual['ingredientes']}'
-                ),
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(receta_actual['nombre']),
+            content: SingleChildScrollView(
+                child: Column(
+              children: <Widget>[
+                Text('Ingredientes: ${receta_actual['ingredientes']}'),
                 SizedBox(
                   height: 15,
                 ),
-               Text(
-                  receta_actual['receta']
-                )
-            ],
-          )
-        ),
-
-        
-         
-      );
-      //Title: receta_actual['nombre'];
-      
-      
-      
-    });
+                Text(receta_actual['receta'])
+              ],
+            )),
+          );
+          //Title: receta_actual['nombre'];
+        });
   }
+
   @override
+  /* se crea la vista dentro del emulador, con sus respectivos espacios y validaciones */
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
@@ -91,14 +90,6 @@ class _InicioState extends State<Inicio> {
                                 );
                                 print(document.id);
                                 createAlertDialog(document.id);
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => VerReceta(
-                                //             recipe: recipe,
-                                //             idRecipe:
-                                //                 document.documentID,
-                                //             uid: userID)));
                               },
                               child: Stack(
                                 children: <Widget>[
