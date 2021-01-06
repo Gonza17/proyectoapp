@@ -24,7 +24,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     fetchUserInfo();
-    controlador = new TabController(length: 4, vsync: this);
+    controlador = new TabController(length: 3, vsync: this);
   }
 
   fetchUserInfo() async {
